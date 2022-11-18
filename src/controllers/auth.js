@@ -8,8 +8,8 @@ const { sendVerificationCode } = require("./mailServices")
 
 
 const login = (req, res) => {
-    req.session.url = req.url;
-    console.log(req.session)
+    const prevUrl = req.originalUrl;
+    console.log(prevUrl)
     res.render("login", {
         title: "Login"
     })
