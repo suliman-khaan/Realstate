@@ -1,6 +1,5 @@
 const express = require("express");
 const router = new express.Router();
-const salespersonRoutes = require("./salesperson/index");
 const { login, postLogin, signUp } = require("../controllers/auth");
 const {
   forgotPassword,
@@ -128,7 +127,7 @@ router.get("/email", (req, res) => {
     siteURL: "https://members.realestateinstruct.com",
   };
   // welcomeEmail("sulimank418@gmail.com", testUser);
-  sendAgreement("sulimank418@gmail.com", "Suliman Khan");
+  sendAgreement('sulimank418@gmail.com','Suliman Khan')
   res.render("mail/otp", {
     username: "Suliman Khan",
     orderDate: "24 Dec 2022",
@@ -256,7 +255,6 @@ router.get("/check", (req, res) => {
 
 // middleware for all dashboard route
 router.use("/dashboard", authenticated);
-router.use("/dashboard/salesperson", salespersonRoutes);
 
 // main-dashboard
 router.get("/dashboard", dashboard);
