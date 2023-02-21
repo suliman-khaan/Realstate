@@ -1,0 +1,253 @@
+{{>dashboardheader}}
+<style>
+  #userTable_filter label {
+    display: flex;
+    float: right;
+  }
+
+  #userTable_filter label input {
+    margin-left: 10px;
+  }
+
+  #userTable_length {
+    margin: 0;
+  }
+
+  #userTable_length label {
+    margin: 0;
+  }
+</style>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <!-- toast(alert)-->
+    {{>alert}}
+
+    <!-- Navbar -->
+    {{>dashboardNavbar}}
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    {{>dashboardMainSidebar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>All Users</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                <li class="breadcrumb-item active">User Edit</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="card card-solid">
+          <div class="card-body">
+            {{!-- {{#each users}}
+            <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+              <div class="card bg-light d-flex flex-fill">
+                <div class="card-header text-muted border-bottom-0">
+                  Student
+                </div>
+                <div class="card-body pt-0">
+                  <div class="row">
+                    <div class="col-7">
+                      <h2 class="lead"><b>{{this.name}}</b></h2>
+                      <p class="text-muted text-sm"><b>Package: </b> {{this.package.name}}
+                      </p>
+                      <ul class="ml-4 mb-0 fa-ul text-muted">
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-envelope"></i></span> Email: <a
+                            href="mailto:{{{this.email}}}" class="text-muted">{{{this.email}}}</a>
+                        </li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-id-card-alt"></i></span> Driver
+                          License / CA ID: {{this.driver_license}}</li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-calendar-alt"></i></span> DOB:
+                          {{formatDate this.dob}}</li>
+                      </ul>
+                    </div>
+                    <div class="col-5 text-center">
+                      {{#if this.avatar}}
+                      <img src="data:image/jpg;base64,{{this.avatar}}" alt="user-avatar" id="user-avatar"
+                        class="img-circle img-fluid">
+                      {{else}}
+                      <img src="https://ui-avatars.com/api/?name={{this.name}}&size=256" alt="user-avatar"
+                        class="img-circle img-fluid">
+                      {{/if}}
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="text-right">
+                    <a href="/dashboard/user-edit/{{this._id}}" class="btn btn-sm bg-teal">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="/loginAsStudent?uid={{this._id}}" class="btn btn-sm btn-primary">
+                      <i class="fas fa-user"></i> View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/each}} --}}
+            <table id="userTable" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 20px;">#</th>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Email</th>
+                  <th>Package</th>
+                  <th>Driver License/CA ID</th>
+                  <th>DOB</th>
+                  <th style="width: 50px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each users}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td>
+                    <span>{{#if this.avatar}}
+                      <img src="data:image/jpg;base64,{{this.avatar}}" alt="user-avatar" id="user-avatar"
+                        class="img-circle img-fluid" width="25px">
+                      {{else}}
+                      <img src="https://ui-avatars.com/api/?name={{this.name}}&size=256" alt="user-avatar"
+                        class="img-circle img-fluid" width="25px">
+                      {{/if}}
+                    </span>
+                    {{this.name}}
+                  </td>
+                  <td class="text-capitalize">{{this.role}}</td>
+                  <td>{{this.email}}</td>
+                  <td>{{this.package.name}}</td>
+                  <td>{{this.driver_license}}</td>
+                  <td>{{formatDate this.dob}}</td>
+                  <td><a href="/dashboard/user-edit/{{this._id}}" class="btn btn-sm bg-teal" title="Edit User">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="/loginAsStudent?uid={{this._id}}" class="btn btn-sm btn-primary" title="View User">
+                      <i class="fas fa-user"></i></a>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    {{>dashboardfooter}}
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  {{>dashboardfooterlinks}}
+
+  <!-- DataTables  & Plugins -->
+  <script src="/dashboard/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="/dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <script src="/dashboard/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+  <script src="/dashboard/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+  <script src="/dashboard/plugins/jszip/jszip.min.js"></script>
+  <script src="/dashboard/plugins/pdfmake/pdfmake.min.js"></script>
+  <script src="/dashboard/plugins/pdfmake/vfs_fonts.js"></script>
+  <script src="/dashboard/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+  <script src="/dashboard/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+  <script src="/dashboard/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+  <script>
+    $(function () {
+      let table = $('#userTable').DataTable({
+        "dom": "<'row'<'col-sm-12 col-md-auto'><'col-sm-12 col-md-auto pl-md-0 mt-md-0 mt-2'l><'col-sm-12 col-md mt-md-0 mt-2'f>>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'p>>",
+        "paging": true,
+        "lengthChange": true,
+        "language": {
+          "lengthMenu": "_MENU_"
+        },
+        "lengthMenu": [
+          [10, 25, 50, -1],
+          ["10 Users", "25 Users", "50 Users", 'All Users'],
+        ],
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        initComplete: function () {
+          this.api()
+            .column(4)
+            .every(function () {
+              var column = this;
+              var select = $('<select class="form-control w-auto d-inline mb-2 mb-md-0 text-capitalize"><option value="">Filter By Package</option></select>')
+                .appendTo($('#userTable_wrapper').children('.row:first').children('div:first'))
+                //.appendTo($(colum.header()))
+                .on('change', function () {
+                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                  column.search(val ? '^' + val + '$' : '', true, false).draw();
+                });
+              select.on('click', function (e) {
+                e.stopPropagation()
+              })
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                  select.append(`<option value="${d}">${d}</option>`);
+                });
+            }).column(2)
+            .every(function () {
+              var column = this;
+              var select = $('<select class="form-control w-auto d-inline ml-md-2 text-capitalize"><option value="">Filter By Role</option></select>')
+                .appendTo($('#userTable_wrapper').children('.row:first').children('div:first'))
+                //.appendTo($(colum.header()))
+                .on('change', function () {
+                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                  column.search(val ? '^' + val + '$' : '', true, false).draw();
+                });
+              select.on('click', function (e) {
+                e.stopPropagation()
+              })
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                  select.append(`<option value="${d}">${d}</option>`);
+                });
+            });
+        }
+      });
+      $(table.table().container()).find('[name="userTable_length"]').removeClass('custom-select custom-select-sm form-control-sm')
+    });
+  </script>
+</body>
+
+</html>

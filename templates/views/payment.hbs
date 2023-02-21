@@ -1,7 +1,7 @@
 {{>header}}
 
 <body>
-    <main class="login-page pt-5 ">
+    <main class="login-page py-5 ">
         <div class="container">
             <div class="row">
                 <!-- Order Detail -->
@@ -12,6 +12,14 @@
                         </div>
                         <div class="card-body">
                             <table class="table table-borderless">
+                                {{#if alert}}
+                                <div class="alert {{#ifEquals toast.type " success"}} alert-success {{else}}
+                                    alert-danger {{/ifEquals}} alert-dismissible fade show" role="alert">
+                                    {{alert.text}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {{/if}}
                                 <tbody>
                                     <tr>
                                         <th scope="row" class="text-start">Name</th>
@@ -21,52 +29,160 @@
                                         <td scope="row" class="text-start">Email</td>
                                         <td class="text-end">{{user.email}}</td>
                                     </tr>
-                                    <tr>
-                                        <td scope="row" class="text-start">Driver License / CA ID Number</td>
-                                        <td class="text-end">{{user.personal_id}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row" class="text-start">Phone</td>
-                                        <td class="text-end">{{user.phone}}</td>
-                                    </tr>
                                 </tbody>
                             </table>
-                            <h3 class="mt-5">Order Summary</h3>
+                            <h3>Order Summary</h3>
                             <table class="table table-borderless mt-4">
                                 <tbody>
                                     <tr>
-                                        <th scope="row" class="text-start">User</th>
-                                        <th class="text-end">{{user.package.name}}</th>
+                                        <th scope="row" class="text-start text-capitalize">
+                                            {{itemDetail.type}}
+                                        </th>
+                                        <th class="text-end text-capitalize">
+                                            {{itemDetail.name}}
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <td scope="row" class="text-start">Package Subtotal</td>
-                                        <td class="text-end">${{user.package.price}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row" class="text-start">Order Discounts</td>
-                                        <td class="text-danger text-end">-$0</td>
+                                        <td scope="row" class="text-start text-capitalize">
+                                            {{itemDetail.type}} Subtotal</td>
+                                        <td class="text-end">${{itemDetail.price}}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td scope="row" class="text-start">Taxes</td>
-                                        <td class="text-end">{{user.package.tax}}%</td>
+                                        <td class="text-end">{{itemDetail.tax}}%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" class="text-start">Order Discount</td>
+                                        <td class="text-danger text-end discount">-$0</td>
                                     </tr>
                                     <tr class="border-top">
                                         <th scope="row" class="text-start">Estimated Total</th>
-                                        <th class="text-end">${{user.total}}</th>
+                                        <th class="text-end">${{itemDetail.total}}</th>
+                                    </tr>
+                                    <tr class="discount-row d-none">
+                                        <td scope="row" class="text-start">After Discount</td>
+                                        <th class="text-end discount-price text-success">$00</th>
+                                    </tr>
+                                    <tr class="border-bottom coupon-input-row">
+                                        <td colspan="2">
+                                            <div class="col-md-8 ms-auto">
+                                                <div class="input-group justify-content-md-end">
+                                                    <input type="text" class="st-input" id="coupon-code"
+                                                        placeholder="Coupon Code" aria-describedby="coupon-code">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        id="coupon-btn" style="width: 120px;">
+                                                        <div class="spinner d-none">
+                                                            <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                                        </div>
+                                                        <span class="text">
+                                                            Apply Code
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                                <p
+                                                    class="fs-14 text-center p-0 ps-1 opacity-0 m-0 text-danger coupon-msg">
+                                                    msg</p>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button class="btn btn-success" id="stripe-payment"><i class="fa-solid fa-credit-card"></i>
-                                Card</button>
-                            <a class="btn btn-paypal text-white" href="/paypal?user={{user._id}}"><i class="fa-brands fa-cc-paypal"></i> PayPal</a>
+                            <div class="div">
+                                {{#if showDOB}}
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="float-start mb-1" for="driver-id">Driver License / CA ID
+                                            Number</label>
+                                        <input class="st-input w-100" type="text"
+                                            placeholder="Driver License / CA ID Number" id="driver-id">
+                                        <p class="fs-12 text-start p-0 ps-1 opacity-0 m-0 text-danger">msg</p>
+                                    </div>
+                                    <div class="col">
+                                        <label class="float-start mb-1" for="dob">Date of Birth</label>
+                                        <input class="st-input w-100" type="date" id="dob">
+                                        <p class="fs-12 text-start p-0 ps-1 opacity-0 m-0 text-danger">msg</p>
+                                    </div>
+                                </div>
+                                {{/if}}
+                                {{!-- Stripe Form --}}
+                                <form id="payment-form">
+                                    <div id="payment-element">
+                                        <!--Stripe.js injects the Payment Element-->
+                                    </div>
+                                    <div class="payment-form-btn d-none justify-content-center">
+                                        <button id="submit" type="submit"
+                                            class="stripe-submit btn btn-secondary w-50 mt-4 me-2">
+                                            <div class="spinner d-none" id="spinner">
+                                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                            </div>
+                                            <span id="button-text">Pay now</span>
+                                        </button>
+                                        {{!-- For PayPal --}}
+                                        <span class="stripe-submit btn btn-success mt-4" id="stripe-reset">
+                                            <span id="button-text">PayPal</span>
+                                        </span>
+                                    </div>
+                                    <div id="payment-message" class="hidden"></div>
+                                </form>
+                            </div>
+                            {{!-- Select the payment method(paypal or stripe) --}}
+                            <div class="btn-pay">
+                                <button class="btn btn-success px-5 py-2 mb-2 mb-md-0" id="stripe-payment">
+                                    <div class="spinner d-none" id="spinner-stripe">
+                                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                    </div>
+                                    <span id="button-text"><i class="fa-solid fa-credit-card"></i> Pay with Credit
+                                        Card</span>
+                                </button>
+                                <button class="btn btn-paypal px-5 py-2 text-white paypal">
+                                    <div class="spinner d-none" id="spinner-paypal">
+                                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                    </div>
+                                    <span id="button-text"><i class="fa-brands fa-cc-paypal"></i> Pay with PayPal</span>
+                                </button>
+                            </div>
+                            <div class="btn-coupon-register d-none">
+                                <button class="btn btn-success px-5 py-2 mb-2 mb-md-0" style="width: 200px;"
+                                    id="coupon-register">
+                                    <div class="spinner d-none">
+                                        <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                    </div>
+                                    <span class="text" id="button-text">Register</span>
+                                </button>
+                                <p class="fs-14 text-center p-0 ps-1 opacity-0 m-0 text-danger coupon-reg-msg">
+                                    msg </p>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="coupon" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+            aria-labelledby="couponLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body p-4">
+                        <p class="mb-0 text-center fs-16">Registration Successful.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+    {{>footer}}
     <script>
         //Passing to the strip.js file form hbs data
         const user = `{{{user._id}}}`
+        const driverID_db = `{{{user.driver_license}}}`
+        const dob_db = `{{{user.dob}}}`
+        const user_email = `{{{user.email}}}`
+        const user_name = `{{{user.name}}}`
+        const STRIPE_API = `{{{stripe_api}}}`
+        const packageTotal = `{{{user.total}}}`
     </script>
-    <script src="/js/stripe.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="/js/payment.js"></script>

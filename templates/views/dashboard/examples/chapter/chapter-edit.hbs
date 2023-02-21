@@ -1,0 +1,121 @@
+{{>dashboardheader}}
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <!-- toast(alert)-->
+  {{!-- {{>alert}} --}}
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <!-- Navbar -->
+    {{>dashboardNavbar}}
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    {{>dashboardMainSidebar}}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1>Edit Chapter</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                <li class="breadcrumb-item active">Edit Chapter</li>
+              </ol>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        <form action="update-chapter?cId={{chapter._id}}" method="post" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">General</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="inputName">Chapter Name</label>
+                    <input type="text" required id="inputName" name="name" value="{{chapter.name}}"
+                      class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="coursefile">Chapter File <span class="small text-danger">(File Should be less than
+                        10Mb)</span></label>
+                    <input type="file" id="coursefile" name="courseFile" class="form-control border-0 px-0">
+                    <p class="mb-0 mt-2">
+                      <b>Already Uploaded Chapter:</b>
+                      <a href="/{{chapter.path}}" target="_blank">{{chapter.fileName}}
+                        <i class="fa-solid fa-file-pdf mr-1" style="color: red;"></i>
+                      </a>
+                    </p>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputStatus">On Trial
+                      {{!-- <span class="small text-danger">(Other chapters of this course
+                        will be removed
+                        from the trial if exist.)</span> --}}
+                    </label>
+                    <div>
+                      <input type="checkbox" value="yes" name="trial" {{#if chapter.onTrial}}checked{{/if}}
+                        data-bootstrap-switch>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputStatus">Select Course</label>
+                    <select id="inputStatus" required name="course" class="form-control custom-select">
+                      <option disabled value="">Select one</option>
+                      <option selected value="{{chapter.course.name}}">{{chapter.course.name}}</option>
+                      {{#each courses}}
+                      <option value="{{this.name}}">{{this.name}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-success float-right">Update Chapter</button>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          {{!-- <div class="row">
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-success float-right">Update Chapter</button>
+            </div>
+          </div> --}}
+        </form>
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    {{>dashboardfooter}}
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- jQuery -->
+  {{>dashboardfooterlinks}}
+  <script src="/dashboard/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+  <script>
+    $("input[data-bootstrap-switch]").each(function () {
+      $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    })
+  </script>
+</body>
+
+</html>

@@ -1,163 +1,281 @@
-require('dotenv').config()
-const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
-const paypal = require('@paypal/checkout-server-sdk');
-const User = require('../models/users');
-const Order = require("../models/order")
-const Package = require("../models/package")
-const url = require('url');
-const { encodeMsg } = require('../helper/createMsg');
+require("dotenv").config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const paypal = require("paypal-rest-sdk");
+const User = require("../models/users");
+const Order = require("../models/order");
+const Package = require("../models/package");
+const url = require("url");
+const { encodeMsg } = require("../helper/createMsg");
+const Coupon = require("../models/coupons");
+const { welcomeEmail } = require("./mailServices");
+const Course = require("../models/courses");
 
-const Environment = process.env.NODE_ENV === "production" ?
-    paypal.core.LiveEnvironment :
-    paypal.core.SandboxEnvironment;
-const paypalClient = new paypal.core.PayPalHttpClient(
-    new Environment(
-        process.env.PAYPAL_CLIENT_ID,
-        process.env.PAYPAL_CLIENT_SECRET
-    )
-)
+paypal.configure({
+  mode: process.env.SITE_DEBUG ? "sandbox" : "live",
+  client_id: process.env.PAYPAL_CLIENT_ID,
+  client_secret: process.env.PAYPAL_CLIENT_SECRET,
+});
+const itemDetails = async (cart) => {
+  //  package or course detail
+  let price, itemName;
+  if (cart.itemType == "package" && cart.item) {
+    let package = await Package.findById(cart.item);
+    itemName = package.name;
+    price = Math.round(package.price * ((100 + package.tax) / 100));
+  }
+  if (cart.itemType == "course" && cart.item) {
+    let course = await Course.findById(cart.item);
+    itemName = course.name;
+    price = course.price;
+  }
+  return { price, itemName };
+};
 module.exports = {
-    async stripeAPI(req, res) {
-        try {
-            const user = await User.findById(req.body.userId).populate('package');
-            if (user) {
-                const { price, tax, name } = user.package;
-                const totalAmount = price * ((100 + tax) / 100)
-                const session = await stripe.checkout.sessions.
-                    create({
-                        payment_method_types: ["card"],
-                        // mode change to subscription when needed
-                        mode: "payment",
-                        line_items: [{
-                            price_data: {
-                                currency: 'usd',
-                                product_data: { name },
-                                unit_amount: totalAmount * 100
-                            },
-                            quantity: 1
-                        }],
-                        success_url: `${process.env.SERVER_URI}/success?user=${user._id.toString()}&package=${user.package._id}`,
-                        cancel_url: `${process.env.SERVER_URI}/payment?user=${user._id.toString()}`
-                    })
-                res.json({ url: session.url });
-                // console.log(session)
+  async paypalAPI(req, res) {
+    try {
+      const { userId, id, dob, couponId } = req.body;
+      const user = await User.findById(userId);
+      const cart = req.session.cart;
+      if (user) {
+        user.updateOne(
+          { dob, driver_license: id },
+          { runValidators: true },
+          async (error, result) => {
+            if (error) {
+              if (error.message.indexOf("duplicate key error") != -1) {
+                res.send({ error: "Driver License is already taken." });
+              }
             }
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({ error: e.message });
-        }
-    },
-    async stripeSuccess(req, res) {
-        try {
-            const userId = req.query.user;
-            const packageId = req.query.package;
-            const user = await User.findById(userId);
-            const package = await Package.findById(packageId);
-            if (user && package) {
-                const order = await Order({
-                    user: user._id,
-                    package: package._id,
-                    amount: package.price * ((100 + package.tax) / 100),
-                    pay_method: "Stripe",
-                    verified: false//need to change when the payment is confirmed 
-                }).save()
-                if (order) {
-                    return req.login(user, function (err) {
-                        if (err) { return next(err); }
-                        return res.redirect(url.format({
-                            pathname: '/dashboard',
-                            query: {
-                                msg: encodeMsg('Welcome to Real Estate')
-                            }
-                        }));
-                    });
-                }
-            }
-            return res.redirect(url.format({
-                pathname: '/payment',
-                query: {
-                    user: userId
-                }
-            }))
-        } catch (error) {
-            console.log("500 Erro:", error)
-            res.render('500')
-        }
-    },
-    async paypalAPI(req, res) {
-        try {
-            if (req.query.user) {
-                const user = await User.findById(req.query.user).populate('package');
-                if (user) {
-                    return await res.render('paypal', {
-                        title: "PayPal",
-                        Paypal_client_id: process.env.PAYPAL_CLIENT_ID,
-                        user
-                    });
-                }
-            }
-            return res.redirect('/')
-        } catch (error) {
-            res.render('500')
-        }
-    },
-    async doPaypal(req, res) {
-        const request = new paypal.orders.OrdersCreateRequest();
-        const user = await User.findById(req.body.userId).populate('package');
-        const { price, tax, name } = user.package;
-        const total = price * ((100 + tax) / 100)
-        request.prefer("return=representation");
-        request.requestBody({
-            intent: 'CAPTURE',
-            purchase_units: [{
-                amount: {
-                    currency_code: 'USD',
-                    value: total,
-                    breakdown: {
-                        item_total: {
-                            currency_code: 'USD',
-                            value: total
-                        }
-                    }
+            if (result) {
+              let price = (await itemDetails(cart)).price;
+              let discount = 0;
+              if (couponId) {
+                const coupon = await Coupon.findById(couponId)
+                  .where("length")
+                  .ne(0)
+                  .gte("validTill", new Date());
+                discount = Number(price) * (Number(coupon.discount) / 100);
+              }
+              var amount = price - discount;
+              const create_payment_json = {
+                intent: "sale",
+                payer: {
+                  payment_method: "paypal",
                 },
-                items: [{
-                    name,
-                    unit_amount: {
-                        currency_code: 'USD',
-                        value: total
+                redirect_urls: {
+                  return_url: `${
+                    process.env.SERVER_URI
+                  }/success?user=${user._id.toString()}&couponId=${couponId}`,
+                  cancel_url: `${
+                    process.env.SERVER_URI
+                  }/payment?user=${user._id.toString()}`,
+                },
+                transactions: [
+                  {
+                    item_list: {
+                      items: [
+                        {
+                          name: (await itemDetails(cart)).itemName,
+                          description: "",
+                          quantity: 1,
+                          price: amount,
+                          // tax: '0.45',
+                          currency: "USD",
+                        },
+                      ],
                     },
-                    quantity: 1
-                }]
-            }]
-        })
+                    amount: {
+                      currency: "USD",
+                      total: amount,
+                    },
+                    payment_options: {
+                      allowed_payment_method: "IMMEDIATE_PAY",
+                    },
+                  },
+                ],
+              };
 
-        try {
-            const order = await paypalClient.execute(request);
-            res.json({ id: order.result.id })
-        } catch (e) {
-            res.status(500).json({ error: e.message });
-        }
-    },
-    async paypalCapture(req, res) {
-        console.log(req.body)
-        const { id, status, purchase_units } = req.body.order;
-        if (status == "COMPLETED") {
-            console.log()
-            const user = await User.findById(req.body.userId).populate('package')
-            if (user) {
-                const order = await Order({
-                    user: user._id,
-                    package: user.package._id,
-                    amount: purchase_units[0].amount.value,
-                    pay_method: "PayPal",
-                    transaction: id,
-                    verified: true//because the status is completed
-                }).save()
-                if (order) {
-                    return res.status(201).json({ user })
+              paypal.payment.create(create_payment_json, (e, payment) => {
+                if (e) {
+                  return res.status(500).json({ error: e.response.message });
                 }
+                for (let i = 0; i < payment.links.length; i++) {
+                  if (payment.links[i].rel === "approval_url") {
+                    res.send({ url: payment.links[i].href });
+                  }
+                }
+              });
             }
-        }
-        return res.json({ failed: "Done" })
+          }
+        );
+        return true;
+      }
+      res.send({ url: `${process.env.SERVER_URI}/` });
+    } catch (error) {
+      res.send({ error: "Server Error" });
     }
-}
+  },
+  async stripeIntent(req, res) {
+    try {
+      const cart = req.session.cart;
+      const { userId, id, dob, couponId } = req.body;
+      const user = await User.findById(userId);
+      if (user) {
+        user.updateOne(
+          { dob, driver_license: id },
+          { runValidators: true },
+          async (error, result) => {
+            if (error) {
+              if (error.message.indexOf("duplicate key error") != -1) {
+                res.send({ error: "Driver License is already taken." });
+              }
+            }
+            if (result) {
+              var price = (await itemDetails(cart)).price;
+              let discount = 0;
+              if (couponId) {
+                const coupon = await Coupon.findById(couponId)
+                  .where("length")
+                  .ne(0)
+                  .gte("validTill", new Date());
+                discount = Number(price) * (Number(coupon.discount) / 100);
+              }
+              var amount = price - discount;
+              // Create a PaymentIntent with the order amount and currency
+              const paymentIntent = await stripe.paymentIntents.create({
+                amount,
+                currency: "usd",
+                setup_future_usage: "off_session",
+                // payment_method_types:['card'],
+                automatic_payment_methods: {
+                  enabled: true,
+                },
+              });
+              res.send({
+                clientSecret: paymentIntent.client_secret,
+                id: paymentIntent.id,
+                couponId,
+              });
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+      res.send({ error: "Server error" });
+    }
+  },
+  async stripeIntentCancel(req, res) {
+    try {
+      const paymentIntent = await stripe.paymentIntents.cancel(req.body.id);
+      res.send(paymentIntent);
+    } catch (error) {
+      res.send({ error: "Server error" });
+    }
+  },
+  async paymentSuccess(req, res) {
+    try {
+      const userId = req.query.user;
+      const couponId = req.query.couponId;
+      const cart = req.session.cart;
+
+      // payment_intent is generated by stripe
+      // paymentId is generated by paypal
+      const paymentId = req.query.payment_intent || req.query.paymentId;
+      let user = await User.findById(userId);
+      if (user) {
+        let discount = 0,
+          price,
+          itemName;
+        if (cart.itemType == "course" && cart.item) {
+          const course = await Course.findById(cart.item);
+          itemName = course.name;
+          price = course.price;
+        }
+        if (cart.itemType == "package" && cart.item) {
+          const package = await Package.findById(cart.item);
+          itemName = package.name;
+          price = package.price;
+        }
+        if (couponId != "undefined") {
+          const coupon = await Coupon.findById(couponId).where("length");
+          discount = Number(price) * (Number(coupon.discount) / 100);
+          await Coupon.findOneAndUpdate(
+            { _id: couponId, length: { $gt: 0 } },
+            { $inc: { length: -1 } }
+          );
+        }
+        // adding item(course) to user model
+        if (cart.itemType == "course") {
+          if (
+            Array.isArray(user.courses) &&
+            !user.courses.includes(cart.item)
+          ) {
+            user.courses.push(cart.item);
+          } else {
+            user.courses = [cart.item];
+          }
+        }
+        // adding item(package) to user model
+        if (cart.itemType == "package") {
+          if (
+            Array.isArray(user.courses) &&
+            !user.packages.includes(cart.item)
+          ) {
+            user.packages.push(cart.item);
+          } else {
+            user.packages = [cart.item];
+          }
+        }
+        await user.save();
+
+        let orderObj = {
+          user: user._id,
+          amount: price - discount,
+          pay_method: req.query.payment_intent ? "Stripe" : "PayPal",
+          transaction: paymentId,
+          discount,
+          [cart.itemType]: cart.item,
+          verified: true,
+        };
+
+        const order = await Order(orderObj).save();
+        if (order) {
+          delete req.session.cart;
+          welcomeEmail(user.email, {
+            username: user.name,
+            orderDate: order.createdAt,
+            packageName: itemName,
+            totalPrice: price - discount,
+            siteName: process.env.SITE_NAME,
+            siteURL: "https://members.realestateinstruct.com",
+          });
+          return req.login(user, function (err) {
+            if (err) {
+              return next(err);
+            }
+            return res.redirect(
+              url.format({
+                pathname: "/dashboard",
+                query: {
+                  msg: encodeMsg(`Welcome to ${process.env.SITE_NAME}`),
+                },
+              })
+            );
+          });
+        }
+      }
+      return res.redirect(
+        url.format({
+          pathname: "/payment",
+          query: {
+            user: userId,
+          },
+        })
+      );
+    } catch (error) {
+      console.log("Payment success error:", error);
+      res.redirect("/");
+    }
+  },
+};

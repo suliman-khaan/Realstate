@@ -10,7 +10,7 @@
   * sidebar-mini
 -->
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     <!-- Navbar -->
     {{>dashboardNavbar}}
@@ -52,21 +52,20 @@
               <div class="card">
                 <div class="card-header border-0">
                   <div class="d-flex justify-content-between">
-                    <h3 class="card-title">Online Store Visitors</h3>
-                    <a href="javascript:void(0);">View Report</a>
+                    <h3 class="card-title">Students</h3>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="d-flex">
                     <p class="d-flex flex-column">
-                      <span class="text-bold text-lg">820</span>
-                      <span>Visitors Over Time</span>
+                      <span class="text-bold text-lg">{{countStudents}}</span>
+                      <span>Students Over Time</span>
                     </p>
                     <p class="ml-auto d-flex flex-column text-right">
-                      <span class="text-success">
-                        <i class="fas fa-arrow-up"></i> 12.5%
+                      <span class="{{#ifCond perNum '>=' 0}}text-success{{else}}text-danger{{/ifCond}}">
+                        <i class="fas fa-arrow-{{#ifCond perNum '>=' 0}}up{{else}}down{{/ifCond}}"></i> {{perNum}}%
                       </span>
-                      <span class="text-muted">Since last week</span>
+                      <span class="text-muted">Since last Year</span>
                     </p>
                   </div>
                   <!-- /.d-flex -->
@@ -77,11 +76,11 @@
 
                   <div class="d-flex flex-row justify-content-end">
                     <span class="mr-2">
-                      <i class="fas fa-square text-primary"></i> This Week
+                      <i class="fas fa-square text-primary"></i> This Year
                     </span>
 
                     <span>
-                      <i class="fas fa-square text-gray"></i> Last Week
+                      <i class="fas fa-square text-gray"></i> Last Year
                     </span>
                   </div>
                 </div>
@@ -94,20 +93,21 @@
                 <div class="card-header border-0">
                   <div class="d-flex justify-content-between">
                     <h3 class="card-title">Sales</h3>
-                    <a href="javascript:void(0);">View Report</a>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="d-flex">
                     <p class="d-flex flex-column">
-                      <span class="text-bold text-lg">$18,230.00</span>
+                      <span class="text-bold text-lg">${{allSale}}</span>
                       <span>Sales Over Time</span>
                     </p>
                     <p class="ml-auto d-flex flex-column text-right">
-                      <span class="text-success">
-                        <i class="fas fa-arrow-up"></i> 33.1%
+                      <span class="{{#ifCond percentageAmount '>=' 0}}text-success{{else}}text-danger{{/ifCond}}">
+                        <i
+                          class="fas fas {{#ifCond percentageAmount '!=' 0}}fa-arrow-{{#ifCond percentageAmount '>=' 0}}up{{else}}down{{/ifCond}}{{/ifCond}}"></i>
+                        {{percentageAmount}}%
                       </span>
-                      <span class="text-muted">Since last month</span>
+                      <span class="text-muted">Since last Year</span>
                     </p>
                   </div>
                   <!-- /.d-flex -->
@@ -130,6 +130,69 @@
 
             </div>
             {{/ifEquals}}
+            {{!-- regulator --}}
+            {{#ifEquals user.role "regulator"}}
+            <!-- Purchased Course -->
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-header border-0">
+                  <h3 class="card-title">All Courses</h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-striped table-valign-middle">
+                    <thead>
+                      <tr>
+                        <th>Course Name</th>
+                        <th class="text-right">View</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#each userCourses}}
+                      <tr>
+                        <td>
+                          <a class="text-capitalize" href="/dashboard/view-course/{{this._id}}">{{this.name}}</a>
+                        </td>
+                        <td class="text-right">
+                          <a href="/dashboard/view-course/{{this._id}}" class="text-muted">
+                            <i class="fas fa-book"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!--  /.col-md-6 -->
+            <!-- Completed Course -->
+            {{!-- <div class="col-lg-6">
+              <div class="card">
+                <div class="card-header border-0">
+                  <h3 class="card-title">Completed Courses</h3>
+                </div>
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-striped table-valign-middle">
+                    <thead>
+                      <tr>
+                        <th>Course Name</th>
+                        <th>View</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td colspan="2">You haven't complete any course yet.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> --}}
+            <!-- /.col-md-6 -->
+            {{/ifEquals}}
+
+
+            {{!-- Student --}}
             <!-- /.col-md-6 -->
             {{#ifEquals user.role "student"}}
             <!-- Purchased Course -->
@@ -139,96 +202,68 @@
                   <h3 class="card-title">Purchased Courses</h3>
                 </div>
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
+                  <table class="table table-valign-middle">
                     <thead>
                       <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
+                        <th>Course Name</th>
+                        <th>Progress</th>
+                        <th class="text-right">View</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      {{#if userCourses}}
+                      {{#each userCourses}}
+                      <tr class="{{#unless this.unlock}}event-none{{/unless}}">
                         <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Some Product
+                          {{this.test}}
+                          {{#unless started}}
+                          <button type="button" class="btn p-0 text-blue" id="start" {{#if
+                            this.unlock}}data-toggle="modal" data-target="#modal-default" data-banner="/images/course/{{this.banner}}"
+                            data-link="/dashboard/view-course/{{this._id}}" {{/if}}>
+                            {{this.name}}
+                          </button>
+                          {{else}}
+                          <a class="text-capitalize" {{#if this.unlock}}href="/dashboard/view-course/{{this._id}}"
+                            {{else}} href="#" {{/if}}>{{this.name}}</a>
+                          {{/unless}}
                         </td>
-                        <td>$13 USD</td>
                         <td>
-                          <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                          </small>
-                          12,000 Sold
+                          <div class="progress progress-xs">
+                            <div class="progress-bar progress-bar-danger"
+                              style="width: {{lookup ../progress this.name}}%"></div>
+                          </div>
                         </td>
-                        <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                        <td class="text-right">
+                          {{#unless started}}
+                          <button type="button" class="btn p-0 text-muted" id="start" {{#if
+                            this.unlock}}data-toggle="modal" data-target="#modal-default"
+                            data-link="/dashboard/view-course/{{this._id}}" data-banner="/images/course/{{this.banner}}" {{/if}}>
+                            {{#unless this.unlock}}
+                            <i class="fa-solid fa-lock"></i>
+                            {{else}}
+                            <i class="fas fa-book"></i>
+                            {{/unless}}
+                          </button>
+                          {{else}}
+                          <a {{#if this.unlock}}href="/dashboard/view-course/{{this._id}}" {{else}} href="#" {{/if}}
+                            class="text-muted">
+                            {{#unless this.unlock}}
+                            <i class="fa-solid fa-lock"></i>
+                            {{else}}
+                            <i class="fa-solid fa-book"></i>
+                            {{/unless}}
                           </a>
+                          {{/unless}}
                         </td>
                       </tr>
+                      {{/each}}
+                      {{/if}}
                       <tr>
-                        <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Another Product
-                        </td>
-                        <td>$29 USD</td>
-                        <td>
-                          <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                          </small>
-                          123,234 Sold
-                        </td>
-                        <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Amazing Product
-                        </td>
-                        <td>$1,230 USD</td>
-                        <td>
-                          <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                          </small>
-                          198 Sold
-                        </td>
-                        <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Perfect Item
-                          <span class="badge bg-danger">NEW</span>
-                        </td>
-                        <td>$199 USD</td>
-                        <td>
-                          <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                          </small>
-                          87 Sold
-                        </td>
-                        <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
-                          </a>
-                        </td>
+                        <td colspan="2"><a class="text-capitalize" target="_blank"
+                            href="/dashboard/salesperson/">Salesperson</a></td>
+                        <td class="text-right"><a href="/dashboard/salesperson/" target="_blank" class="text-muted">
+                            <i class="fas fa-book"></i>
+                          </a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -243,99 +278,135 @@
                   <h3 class="card-title">Completed Courses</h3>
                 </div>
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-striped table-valign-middle">
+                  <table class="table table-valign-middle">
                     <thead>
                       <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Sales</th>
-                        <th>More</th>
+                        <th>Course Name</th>
+                        <th>View</th>
                       </tr>
                     </thead>
                     <tbody>
+                      {{#if completedCourses}}
+                      {{#each completedCourses as |value property|}}
                       <tr>
                         <td>
-                          <img src="/dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Some Product
+                          <a class="text-capitalize" href="/dashboard/view-course/{{value}}">{{property}}</a>
                         </td>
-                        <td>$13 USD</td>
+                        <td class="">
+                          <a href="/dashboard/view-course/{{value}}" class="text-muted">
+                            <i class="fas fa-book"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      {{/each }}
+                      {{else}}
+                      <tr>
+                        <td colspan="2">You haven't complete any course yet.</td>
+                      </tr>
+                      {{/if}}
+                      {{!-- <tr>
                         <td>
-                          <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            12%
-                          </small>
-                          12,000 Sold
+                          Course
                         </td>
                         <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                          <a href="/dashboard/view-course" class="text-muted">
+                            <i class="fas fa-book"></i>
                           </a>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Another Product
-                        </td>
-                        <td>$29 USD</td>
-                        <td>
-                          <small class="text-warning mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            0.5%
-                          </small>
-                          123,234 Sold
+                          Course
                         </td>
                         <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                          <a href="/dashboard/view-course" class="text-muted">
+                            <i class="fas fa-book"></i>
                           </a>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Amazing Product
-                        </td>
-                        <td>$1,230 USD</td>
-                        <td>
-                          <small class="text-danger mr-1">
-                            <i class="fas fa-arrow-down"></i>
-                            3%
-                          </small>
-                          198 Sold
+                          Course
                         </td>
                         <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                          <a href="/dashboard/view-course" class="text-muted">
+                            <i class="fas fa-book"></i>
                           </a>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <img src="dashboard/dist/img/default-150x150.png" alt="Product 1"
-                            class="img-circle img-size-32 mr-2">
-                          Perfect Item
-                          <span class="badge bg-danger">NEW</span>
-                        </td>
-                        <td>$199 USD</td>
-                        <td>
-                          <small class="text-success mr-1">
-                            <i class="fas fa-arrow-up"></i>
-                            63%
-                          </small>
-                          87 Sold
+                          Course
                         </td>
                         <td>
-                          <a href="#" class="text-muted">
-                            <i class="fas fa-search"></i>
+                          <a href="/dashboard/view-course" class="text-muted">
+                            <i class="fas fa-book"></i>
                           </a>
                         </td>
-                      </tr>
+                      </tr> --}}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            </div>
+
+            {{!-- Agreement Modal --}}
+            <style>
+              .courseModal .modal-dialog {
+                height: calc(100vh - 80px);
+                max-width: 100%;
+              }
+
+              .courseModal .modal-body {
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: contain;
+              }
+
+              .courseModal .btn {
+                width: 90px;
+              }
+            </style>
+            <div class="modal fade courseModal" id="modal-default" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content h-100 shadow-none bg-transparent border-0">
+                  <div class="modal-body d-flex justify-content-center align-items-center">
+                    <button id="yes-start" href="#" class="btn btn-primary" data-toggle="modal"
+                      data-target="#agreement">Begin</button>
+                    <button type="button" class="btn btn-danger ml-2" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade agreement" id="agreement" style="display: none;" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content h-100">
+                  <div class="modal-body">
+                    <h5 class="m-0 mb-4 text-center fa-2x font-weight-bold">Student Agreement</h5>
+                    <p class="m-0">Name: <span class="text-bold">{{user.name}}</span></p>
+                    <p class="m-0 mb-4">Email: <span class="text-bold">{{user.email}}</span></p>
+                    <p>You must complete and submit the following student agreement form before you can proceed with
+                      your course(s).</p>
+                    <p>I, {{user.name}}, under penalty of perjury, do hereby affirm and agree that I am registered
+                      student
+                      of {{site_Title}}, and that I will personally complete each reading assignment, quiz and the
+                      final examination of the course(s). I understand that my failure to comply with this agreement
+                      will result in revocation of completion certificate, and that such violation will be reported to
+                      my local estate industry regulatory authorities.</p>
+                    <p>Furthermore, I understand that the contents of the course(s) may not be copied, reproduced,
+                      resold or used by any other person. Unauthorized copying of this course is prohibited by U.S
+                      copyright laws which provide substantial penalties for copyright infringement.</p>
+                    <p style="margin-bottom: 60px;">By submitting this form I agree to comply with the terms, conditions
+                      and copyright restrictions
+                      as stated herein.</p>
+                    <p class="text-center">
+
+                      <a id="accept" href="#" class="btn btn-primary">Accept</a>
+                    </p>
+                    <p class="text-center" style="margin-top:60px">Sponsor ID: S0665, 8505 Crenshaw Blvd Inglewood CA
+                      91305</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -354,17 +425,87 @@
       <!-- Control sidebar content goes here -->
     </aside>
     <!-- /.control-sidebar -->
-
     <!-- Main Footer -->
     {{>dashboardfooter}}
   </div>
   <!-- ./wrapper -->
 
   <!-- REQUIRED SCRIPTS -->
+  {{!-- this script used for to send data to dashboard3 file to view this data in chart --}}
+  <script>
+    // current year students registration
+    const curJan = `{{{currentYearstdData.[1]}}}`
+    const curFeb = `{{{currentYearstdData.[2]}}}`
+    const curMar = `{{{currentYearstdData.[3]}}}`
+    const curApr = `{{{currentYearstdData.[4]}}}`
+    const curMay = `{{{currentYearstdData.[5]}}}`
+    const curJun = `{{{currentYearstdData.[6]}}}`
+    const curJul = `{{{currentYearstdData.[7]}}}`
+    const curAug = `{{{currentYearstdData.[8]}}}`
+    const curSep = `{{{currentYearstdData.[9]}}}`
+    const curOct = `{{{currentYearstdData.[10]}}}`
+    const curNov = `{{{currentYearstdData.[11]}}}`
+    const curDec = `{{{currentYearstdData.[12]}}}`
+    // last year students registration
+    const lastJan = `{{{lastYearStdObj.[1]}}}`
+    const lastFeb = `{{{lastYearStdObj.[2]}}}`
+    const lastMar = `{{{lastYearStdObj.[3]}}}`
+    const lastApr = `{{{lastYearStdObj.[4]}}}`
+    const lastMay = `{{{lastYearStdObj.[5]}}}`
+    const lastJun = `{{{lastYearStdObj.[6]}}}`
+    const lastJul = `{{{lastYearStdObj.[7]}}}`
+    const lastAug = `{{{lastYearStdObj.[8]}}}`
+    const lastSep = `{{{lastYearStdObj.[9]}}}`
+    const lastOct = `{{{lastYearStdObj.[10]}}}`
+    const lastNov = `{{{lastYearStdObj.[11]}}}`
+    const lastDec = `{{{lastYearStdObj.[12]}}}`
 
+    // current year sales rate
+    const cursaleJan = `{{{currentYearAmount.[1]}}}`
+    const cursaleFeb = `{{{currentYearAmount.[2]}}}`
+    const cursaleMar = `{{{currentYearAmount.[3]}}}`
+    const cursaleApr = `{{{currentYearAmount.[4]}}}`
+    const cursaleMay = `{{{currentYearAmount.[5]}}}`
+    const cursaleJun = `{{{currentYearAmount.[6]}}}`
+    const cursaleJul = `{{{currentYearAmount.[7]}}}`
+    const cursaleAug = `{{{currentYearAmount.[8]}}}`
+    const cursaleSep = `{{{currentYearAmount.[9]}}}`
+    const cursaleOct = `{{{currentYearAmount.[10]}}}`
+    const cursaleNov = `{{{currentYearAmount.[11]}}}`
+    const cursaleDec = `{{{currentYearAmount.[12]}}}`
+    //last year sales rate
+    const lastsaleJan = `{{{lastYearAmount.[1]}}}`
+    const lastsaleFeb = `{{{lastYearAmount.[2]}}}`
+    const lastsaleMar = `{{{lastYearAmount.[3]}}}`
+    const lastsaleApr = `{{{lastYearAmount.[4]}}}`
+    const lastsaleMay = `{{{lastYearAmount.[5]}}}`
+    const lastsaleJun = `{{{lastYearAmount.[6]}}}`
+    const lastsaleJul = `{{{lastYearAmount.[7]}}}`
+    const lastsaleAug = `{{{lastYearAmount.[8]}}}`
+    const lastsaleSep = `{{{lastYearAmount.[9]}}}`
+    const lastsaleOct = `{{{lastYearAmount.[10]}}}`
+    const lastsaleNov = `{{{lastYearAmount.[11]}}}`
+    const lastsaleDec = `{{{lastYearAmount.[12]}}}`
+
+  </script>
   <!-- jQuery -->
   {{>dashboardfooterlinks}}
+  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+  <script src="/dashboard/dist/js/pages/dashboard3.js"></script>
 
+  <script>
+    $("#modal-default").on("show.bs.modal", function (e) {
+      let link = $(e.relatedTarget).data('link')
+      let banner = $(e.relatedTarget).data('banner')
+      $(this).find('.modal-body').css('background', `url('${banner}') no-repeat center`)
+      $(this).find('#yes-start').data('link', link)
+    });
+    $("#agreement").on('show.bs.modal', function (e) {
+      $("#modal-default").modal("hide");
+      let link = $(e.relatedTarget).data('link')
+      $(this).find('#accept').prop('href', link + "?agree=true")
+    });
+  </script>
 </body>
 
 </html>

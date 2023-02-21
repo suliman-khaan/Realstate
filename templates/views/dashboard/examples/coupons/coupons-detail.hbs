@@ -1,0 +1,159 @@
+{{>dashboardheader}}
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+        {{!-- alert toast --}}
+        {{>alert}}
+
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Coupons Detail</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Coupon Detail</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                {{!-- <div class="card-header">
+                                    <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                                </div> --}}
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="couponTable" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Coupon</th>
+                                                <th>Discount</th>
+                                                <th>Length</th>
+                                                <th>Valid From</th>
+                                                <th>Expire Date</th>
+                                                <th>Status</th>
+                                                <th {{#ifEquals user.role "regulator" }}class="d-none" {{/ifEquals}}>
+                                                    Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each coupons}}
+                                            <tr>
+                                                <td style="max-width: 350px;">{{this.code}}</td>
+                                                <td>{{this.discount}}%</td>
+                                                <td>{{#ifEquals this.length
+                                                    "-1"}}Unlimited{{else}}{{this.length}}{{/ifEquals}}</td>
+                                                <td>{{formatDate this.validFrom}}</td>
+                                                <td>{{formatDate this.validTill}}</td>
+                                                <td>{{checkStatus this.validFrom this.validTill}}</td>
+                                                <td {{#ifEquals ../user.role "regulator" }}class="d-none" {{/ifEquals}}>
+                                                    {{!-- <a
+                                                        href="/dashboard/package-detail/edit-package?pId={{this._id}}"
+                                                        type="button">
+                                                        <button class="btn btn-success">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </a> --}}
+                                                    <button type="button" class="btn btn-danger delete" id="delete"
+                                                        data-toggle="modal" data-target="#modal-default"
+                                                        data-id="{{this._id}}">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <div class="modal fade" id="modal-default" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Do you really want to delete this coupon?</p>
+                    <a id="deleteBtn" href="#" class="btn btn-danger">Yes</a>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- jQuery -->
+    {{>dashboardfooterlinks}}
+    {{!-- table jquery plugins --}}
+    <!-- DataTables  & Plugins -->
+    <script src="../dashboard/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/jszip/jszip.min.js"></script>
+    <script src="../dashboard/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../dashboard/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(function () {
+            $('#couponTable').DataTable({
+                "paging": "{{#ifEquals packages.length 10}}true{{/ifEquals}}",
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+            $('.delete').click(function (e) {
+                $('#deleteBtn').attr('href', `/dashboard/coupon-detail/delete-coupon?vId=${$(this).data('id')}`)
+            })
+        });
+    </script>
+
+</body>
+
+</html>

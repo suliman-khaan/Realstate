@@ -1,0 +1,188 @@
+{{>dashboardheader}}
+
+<head>
+    <link rel="stylesheet" href="/dashboard/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+
+        {{!-- alert toast --}}
+        {{>alert}}
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Generate Coupon Code</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Add Voucher</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <form action="coupon-generated" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">General</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                    </div>
+                                    {{!-- 2nd row --}}
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="length">Number of Uses</label>
+                                                <input required type="number" id="length" name="length"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-4 align-self-end">
+                                            <div class="form-group">
+                                                <div
+                                                    class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                        id="checkUnlimited">
+                                                    <label class="custom-control-label"
+                                                        for="checkUnlimited">Unlimited</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{!-- 3rd row --}}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Valid From</label>
+                                                <div class="input-group date" id="validForm"
+                                                    data-target-input="nearest">
+                                                    <input type="text" class="form-control datetimepicker-input"
+                                                        data-target="#validForm" name="validFrom" required />
+                                                    <div class="input-group-append" data-target="#validForm"
+                                                        data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Valid Till</label>
+                                                <div class="input-group date" id="validTill"
+                                                    data-target-input="nearest">
+                                                    <input type="text" class="form-control datetimepicker-input"
+                                                        data-target="#validTill" name="validTill" required />
+                                                    <div class="input-group-append" data-target="#validTill"
+                                                        data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="discount">Discount (%)</label>
+                                        <input required type="number" min="0" max="100" id="discount" name="discount"
+                                            class="form-control">
+                                    </div>
+                                    {{!-- price --}}
+                                    {{!-- <div class="form-group">
+                                        <label for="price">Package Price</label>
+                                        <input type="number" id="price" name="price" class="form-control">
+                                    </div> --}}
+                                </div>
+                                <div class="card-footer">
+                                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-success float-right">Add Coupon Code</button>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    {{>dashboardfooterlinks}}
+
+
+
+
+
+    <script src="/dashboard/plugins/moment/moment.min.js"></script>
+    <script src="/dashboard/plugins/inputmask/jquery.inputmask.min.js"></script>
+    <script src="/dashboard/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="/dashboard/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
+
+    {{!-- custom js or jquery --}}
+    <script>
+        $(function () {
+            $("#checkUnlimited").change(function () {
+                if (this.checked === true) {
+                    $("#length").prop('disabled', true)
+                    $("#length").val("")
+                } else {
+                    $("#length").prop('disabled', false)
+                }
+            })
+            //Datemask2 mm/dd/yyyy
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+            //Date picker
+            $('#validForm').datetimepicker({ format: 'L' })
+            $('#validTill').datetimepicker({ format: 'L' })
+        })
+    </script>
+
+</body>
+
+</html>

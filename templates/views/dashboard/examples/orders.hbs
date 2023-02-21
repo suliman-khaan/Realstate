@@ -1,0 +1,203 @@
+{{>dashboardheader}}
+
+<head>
+    <style>
+        #orderTable_filter label {
+            display: flex;
+            float: right;
+        }
+
+        #orderTable_filter label input {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <!-- toast(alert)-->
+    {{>alert}}
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Orders</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Orders</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                {{!-- <div class="card-header">
+                                    <h3 class="card-title">DataTable with minimal features & hover style</h3>
+                                </div> --}}
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    {{!-- <div class="row">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div id="example1_filter" class="dataTables_filter"><label>Search:
+                                                    <input type="search" class="form-control form-control-sm"
+                                                        placeholder="" aria-controls="example1"></label>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                    <table id="orderTable" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 65px;">#</th>
+                                                <th>Amount</th>
+                                                <th>Package</th>
+                                                {{!-- <th>Teacher</th> --}}
+                                                <th>Payment Mode</th>
+                                                <th>By</th>
+                                                <th>email</th>
+                                                <th>Ordered At</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each orders}}
+                                            <tr>
+                                                <td>{{increment @index}}</td>
+                                                <td>{{this.amount}}</td>
+                                                <td>{{this.package.name}}</td>
+                                                <td>{{this.pay_method}}</td>
+                                                <td>{{this.user.name}}</td>
+                                                <td>{{this.user.email}}</td>
+                                                <td>{{formatDate this.createdAt}}</td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    {{!-- footer links --}}
+    {{>dashboardfooterlinks}}
+    <!-- DataTables  & Plugins -->
+    <script src="/dashboard/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/dashboard/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/dashboard/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/dashboard/plugins/jszip/jszip.min.js"></script>
+    <script src="/dashboard/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/dashboard/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/dashboard/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/dashboard/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/dashboard/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <!-- Page specific script -->
+    <script>
+        $(function () {
+            let table = $('#orderTable').DataTable({
+                "dom": "<'row'<'col-sm-12 col-md-auto'><'col-sm-12 col-md-auto pl-md-0 mt-md-0 mt-2'l><'col-sm-12 col-md mt-md-0 mt-2'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'p>>",
+                "paging": true,
+                "lengthChange": true,
+                "language": {
+                    "lengthMenu": "_MENU_"
+                },
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    ["10 Orders", "25 Orders", "50 Orders", 'All Orders'],
+                ],
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                initComplete: function () {
+                    this.api()
+                        .column(2)
+                        .every(function () {
+                            var column = this;
+                            var select = $('<select class="form-control w-auto d-inline"><option value="">Filter by Package</option></select>')
+                                .appendTo($('#orderTable_wrapper').children('.row:first').children('div:first'))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                });
+                            select.on('click', function (e) {
+                                e.stopPropagation()
+                            })
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function (d, j) {
+                                    select.append(`<option value="${d}">${d}</option>`);
+                                });
+                        }).column(3)
+                        .every(function () {
+                            var column = this;
+                            var select = $('<select class="form-control w-auto d-inline ml-md-2 mt-2 mt-md-0"><option value="">Filter by Payment</option></select>')
+                                .appendTo($('#orderTable_wrapper').children('.row:first').children('div:first'))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                });
+                            select.on('click', function (e) {
+                                e.stopPropagation()
+                            })
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function (d, j) {
+                                    select.append(`<option value="${d}">${d}</option>`);
+                                });
+                        });
+                }
+            });
+            $(table.table().container()).find('[name="orderTable_length"]').removeClass('custom-select custom-select-sm form-control-sm')
+        });
+    </script>
+
+
+</body>
+
+</html>

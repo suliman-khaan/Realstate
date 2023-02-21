@@ -4,24 +4,73 @@ green red green red green red green red  green red ---- Quiz pages ----- green r
 
 */
 
-.quiz .options{
+.quiz .options {
     width: 60%;
 }
-.quiz .options input[type=text]{
+
+.quiz .options input[type=text] {
     width: 90%;
 }
-.quiz input.checkBox{
+
+.quiz input.checkBox {
     height: 18px;
     /* transform: translate(0, 50%); */
     width: 18px;
 }
-.cross{
+
+.cross {
     font-size: 22px;
     color: red;
     font-weight: bold;
     line-height: 24px;
 }
 
+.event-none {
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, .05);
+}
 
+.opacity-25 {
+    opacity: .25;
+}
 
+.place-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
+#tblLocations tr {
+    cursor: move;
+}
+
+.todo-list>li .tools {
+    display: inline-block;
+}
+
+.quiz {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@media screen and (max-width:575px) {
+
+    .dataTables_wrapper .row:first-child div select,
+    .dataTables_wrapper .row:first-child div label {
+        width: 100% !important;
+    }
+
+    .dataTables_wrapper .row:first-child div:last-child label {
+        display: flex;
+        align-items: center;
+    }
+
+    .dataTables_wrapper .row:first-child div:last-child label input {
+        width: 100%;
+    }
+
+}

@@ -1,17 +1,17 @@
 {
-  "name": "realestate",
+  "name": "realestateinstruct",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js -e js,hbs,css",
     "start": "node app.js"
   },
-  "author": "CreatechIt Team",
+  "author": "CreatechIT Team",
   "license": "ISC",
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.3",
+    "axios": "^1.3.2",
     "bcrypt": "^5.1.0",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^4.6.0",
@@ -22,14 +22,18 @@
     "express-validator": "^6.14.2",
     "hbs": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongoose": "^6.7.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^5.0.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "paypal-rest-sdk": "^1.8.1",
+    "sharp": "^0.31.2",
     "stripe": "^10.15.0",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "voucher-code-generator": "^1.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

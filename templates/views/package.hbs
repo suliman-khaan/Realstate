@@ -1,9 +1,69 @@
 {{>header}}
 
 <body>
-    <div class="container">
+
+    {{!-- <div class="container">
         <p>Test page for package</p>
-        <a href="/checkout?package=636b5e1e1d884c047bddcfbc" class="btn btn-success">Basic ($1199)</a>
-        <a href="/checkout?package=636b7ddbd2dccf7bc0b180de" class="btn btn-info">Silver ($1299)</a>
-    </div>
+        {{#if msg.text}}
+        <div class="alert {{#ifEquals msg.type " success"}} alert-success {{else}} alert-danger {{/ifEquals}}
+            alert-dismissible fade show w-50" role="alert">
+            {{{msg.text}}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{/if}}
+        {{#each packages}}
+        <a href="/checkout?package={{this._id}}" class="btn btn-success">{{this.name}} (${{this.price}})</a>
+        {{/each}}
+    </div> --}}
+    {{!-- <a href="/checkout?package=636b7ddbd2dccf7bc0b180de" class="btn btn-info">Silver ($1299)</a> --}}
+    {{!-- first top section with login and signup buttons --}}
+    <main class="py-5">
+        <div class="container">
+            <nav class="navbar">
+                <div class="container justify-content-end">
+                    <span class="me-2">Already Registered ?</span>
+                    <a href="/login" class="link-primary fw-bold">Sign In</a>
+                </div>
+            </nav>
+            <div class="row">
+                {{#if msg.text}}
+                <div class="alert {{#ifEquals msg.type " success"}} alert-success {{else}} alert-danger {{/ifEquals}}
+                    alert-dismissible fade show w-50" role="alert">
+                    {{{msg.text}}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {{/if}}
+            </div>
+            <div class="row">
+                {{#each packages}}
+                <div class="col-lg-3 col-md-5 p-1 text-center">
+                    <div class=" package-column">
+                        <h5>{{this.name}}</h5>
+                        <h1 class="text-decoration-line-through">${{increaseAmount this.price}}</h1>
+                        <h2>${{this.price}}</h2>
+                        <div>
+                            <a href="checkout?package={{_id}}">
+                                <button class="btn btn-primary border-0 rounded-0 px-5 py-2">Enroll</button>
+                            </a>
+                        </div>
+                        <p class="bg-primary text-white py-2 mt-2">WHO IT'S FOR</p>
+                        <div>
+                            {{#each whoFor}}
+                            <p>{{this}}</p>
+                            {{/each}}
+                        </div>
+                        <p class="bg-primary text-white py-2">WHAT'S INCLUDED</p>
+                        <div>
+                            {{#each this.whatsIncluded}}
+                            <p class="text-capitalize">{{this}}</p>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.3/iframeResizer.contentWindow.js"></script>
+
     {{>footer}}

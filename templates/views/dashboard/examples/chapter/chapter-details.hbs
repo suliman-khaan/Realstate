@@ -1,0 +1,182 @@
+{{>dashboardheader}}
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+
+        <!-- toast(alert)-->
+        {{>alert}}
+        <!-- toast(alert)-->
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Chapters Detail</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Courses Detail</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="chapterTable" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 65px;">S.no</th>
+                                                <th>Name</th>
+                                                <th>Course</th>
+                                                <th>File</th>
+                                                <th>Trial Link</th>
+                                                <th {{#ifEquals user.role "regulator" }}class="d-none" {{/ifEquals}}>
+                                                    Edit</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each chapters}}
+                                            <tr>
+                                                <td>{{increment @index}}</td>
+                                                <td>{{this.name}}</td>
+                                                <td>{{this.course.name}}</td>
+                                                <td>
+                                                    <a href="/{{this.path}}" target="_blank">
+                                                        <i class="fa-solid fa-file-pdf mr-1" style="color: red;"></i>
+                                                        {{this.fileName}}
+                                                    </a>
+                                                </td>
+                                                <td>{{#if this.onTrial}}
+                                                    <a href="/trial/chapter/{{this.course._id}}/{{this._id}}"><span
+                                                            class="domainName"></span>/trial/chapter/{{this.course._id}}/{{this._id}}</a>
+                                                    {{else}}No{{/if}}
+                                                </td>
+                                                {{#ifEquals ../user.role "regulator" }}<td class="d-none">{{else}}
+                                                <td>
+                                                    <a href="/dashboard/chapter-detail/edit-chapter?cId={{this._id}}"
+                                                        type="button">
+                                                        <button class="btn btn-success">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                                {{/ifEquals}}
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    {{>dashboardfooterlinks}}
+    {{!-- table jquery plugins --}}
+    <!-- DataTables  & Plugins -->
+    <script src="../dashboard/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../dashboard/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../dashboard/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../dashboard/plugins/jszip/jszip.min.js"></script>
+    <script src="../dashboard/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../dashboard/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../dashboard/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(function () {
+            let table = $('#chapterTable').DataTable({
+                "dom": "<'row'<'col-sm-12 col-md-auto'><'col-sm-12 col-md-auto pl-md-0 mt-md-0 mt-2'l><'col-sm-12 col-md'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'p>>",
+                "paging": true,
+                "lengthChange": true,
+                "language": {
+                    "lengthMenu": "_MENU_"
+                },
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    ["10 Chapters", "25 Chapters", "50 Chapters", 'All Chapters'],
+                ],
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                initComplete: function () {
+                    this.api()
+                        .column(2)
+                        .every(function () {
+                            var column = this;
+                            var select = $('<select class="form-control w-auto d-inline "><option value="">Filter By Course</option></select>')
+                                .appendTo($('#chapterTable_wrapper').children('.row:first').children('div:first'))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                });
+                            select.on('click', function (e) {
+                                e.stopPropagation()
+                            })
+                            column
+                                .data()
+                                .unique()
+                                .sort()
+                                .each(function (d, j) {
+                                    select.append(`<option value="${d}">${d}</option>`);
+                                });
+                        });
+                }
+            });
+            $(table.table().container()).find('[name="chapterTable_length"]').removeClass('custom-select custom-select-sm form-control-sm')
+        });
+        let fullUrl = new URL(window.location)
+        const domainName = fullUrl.origin
+        $(".domainName").text(domainName)
+    </script>
+
+</body>
+
+</html>

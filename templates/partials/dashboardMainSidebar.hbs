@@ -1,18 +1,22 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside
+  class="main-sidebar {{#if salesperson}}sidebar-dark-orange{{else}}sidebar-dark-primary{{/if}} elevation-4 d-flex flex-column overflow-hidden">
   <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
-    <img src="/dashboard/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-      style="opacity: .8">
+  <a href="/dashboard" class="brand-link">
+    <img src="{{site_logo}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">{{site_Title}}</span>
   </a>
 
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar flex-grow-1">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img src="https://ui-avatars.com/api/?name={{user.name}}&rounded=true"
-          class="img-circle elevation-2" alt="User Image">
+        {{#if user.avatar}}
+        <img src="data:image/jpg;base64,{{user.avatar}}" class="img-circle elevation-2" alt="User Image">
+        {{else}}
+        <img src="https://ui-avatars.com/api/?name={{user.name}}&rounded=true" class="img-circle elevation-2"
+          alt="User Image">
+        {{/if}}
       </div>
       <div class="info">
         <a href="#" class="d-block">{{user.name}}</a>
@@ -22,104 +26,61 @@
     <!-- SidebarSearch Form -->
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+      <ul class="nav nav-pills nav-sidebar flex-column {{#if salesperson}}nav-child-indent{{/if}}"
+        data-widget="treeview" role="menu" data-accordion="false" style="margin-bottom:70px">
         <!-- dashboard -->
         <li class="nav-item">
-          <a href="/dashboard" id='dashboard-link' class="nav-link">
+          <a href="/dashboard{{#if salesperson}}/salesperson{{/if}}" id='dashboard-link' class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
               Dashboard
             </p>
           </a>
         </li>
-        <!-- Tables -->
-        {{!-- <li class="nav-item">
-          <a href="/dashboard/table" id="table-link" class="nav-link">
-            <i class="nav-icon fas fa-table"></i>
-            <p>
-              Tables
-            </p>
-          </a>
-        </li> --}}
-        <!-- Calender -->
-        {{!-- <li class="nav-item">
-          <a href="/dashboard/calendar" id="calendar-link" class="nav-link">
-            <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>
-              Calendar
-              <span class="badge badge-info right">2</span>
-            </p>
+        {{#if salesperson}}
+        {{>salesperson/mainSidebar}}
+        <li class="nav-item">
+          <a href="/dashboard/" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-solid fa-home nav-icon"></i>
+            <p>Real Estate</p>
           </a>
         </li>
-        <!-- Mail Box -->
+        {{else}}
+        {{!-- for student --}}
+        {{#ifEquals user.role "student"}}
         <li class="nav-item">
-          <a href="#" id="mailbox-link" class="nav-link">
-            <i class="nav-icon far fa-envelope"></i>
-            <p>
-              Mailbox
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="/dashboard/inbox" id="inbox-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Inbox</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/dashboard/compose" id="compose-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Compose</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/dashboard/read" id="read-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Read</p>
-              </a>
-            </li>
-          </ul>
-        </li> --}}
-        {{#ifEquals user.role "admin"}}
-        <!-- Examples or pages -->
-        <li class="nav-item">
-          <a href="#" id="page-link" class="nav-link">
+          <a href="/dashboard/courses" id="courses" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
             <i class="nav-icon fas fa-book"></i>
-            <p>
-              Pages
-              <i class="fas fa-angle-left right"></i>
-            </p>
+            <p>Courses</p>
           </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="/dashboard/invoice" id="invoice-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Invoice</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/dashboard/profile" id="profile-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Profile</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/dashboard/contacts" id="contact-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Contacts</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/dashboard/contact-us" id="contact-us-link" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Contact us</p>
-              </a>
-            </li>
-          </ul>
         </li>
+        <li class="nav-item">
+          <a href="/dashboard/contact-us" id="contact-us-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-solid fa-id-card-clip nav-icon"></i>
+            <p>Contact Us</p>
+          </a>
+        </li>
+        {{!-- Buy More --}}
+        <li class="nav-item">
+          <a href="/dashboard/buy-more" id="buyMore-link" class="nav-link">
+            <i class="fa-solid fa-bag-shopping nav-icon"></i>
+            <p>Buy More</p>
+          </a>
+        </li>
+        {{!-- Setting --}}
+        <li class="nav-item">
+          <a href="/dashboard/setting" id="setting-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-sharp fa-solid fa-gear nav-icon"></i>
+            <p>Settings</p>
+          </a>
+        </li>
+        {{/ifEquals}}
+        {{!-- for admin --}}
+        {{#ifEquals user.role "admin"}}
         <!-- Package -->
         <li class="nav-item">
           <a href="#" id="package-link" class="nav-link">
@@ -216,28 +177,141 @@
             </li>
           </ul>
         </li>
-        {{/ifEquals}}
-        <!-- Search -->
-        {{!-- <li class="nav-item">
-          <a href="/dashboard/search" id="search-link" class="nav-link">
-            <i class="nav-icon fas fa-search"></i>
+        {{!-- salesperson --}}
+        <li class="nav-item">
+          <a href="/dashboard/salesperson" id="sale-link" target="_blank" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-solid fa-cloud nav-icon"></i>
+            <p>Salesperson</p>
+          </a>
+        </li>
+        {{!-- sort --}}
+        <li class="nav-item">
+          <a href="/dashboard/sort" id="sort-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-sharp fa-solid fa-sort nav-icon"></i>
+            <p>Sort</p>
+          </a>
+        </li>
+        {{!-- coupons or vouchers --}}
+        <li class="nav-item">
+          <a href="#" id="voucher-link" class="nav-link">
+            <i class="nav-icon fas fa-gift"></i>
             <p>
-              Search
+              Coupons
+              <i class="fas fa-angle-left right"></i>
             </p>
           </a>
-        </li> --}}
-        <!--Logout -->
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/dashboard/add-coupon" id="voucher-add-link" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Coupon</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/coupon-detail" id="voucher-detail-link" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Coupons Detail</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {{!-- users --}}
+        {{!-- users --}}
+        <li class="nav-item">
+          <a href="#" id="users-link" class="nav-link">
+            <i class="fa-solid fa-users nav-icon"></i>
+            <p>
+              Users
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/dashboard/add-user" id="users-add-link" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add User</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/users" id="users-all-link" class="nav-link">
+                {{!-- <i class="far fa-circle nav-icon"></i> --}}
+                <i class="far fa-circle nav-icon"></i>
+                <p>Users</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {{!-- Orders --}}
+        <li class="nav-item">
+          <a href="/dashboard/order" id="order-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-sharp fa-solid fa-file-invoice-dollar nav-icon"></i>
+            <p>Orders</p>
+          </a>
+        </li>
+        {{!-- message --}}
+        <li class="nav-item">
+          <a href="/dashboard/messages" id="messages-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="far fa-envelope nav-icon"></i>
+            <p>Messages
+              {{#if unreadMsg}}
+              <span class="badge badge-info right">{{unreadMsg}}</span>
+              {{/if}}
+            </p>
+          </a>
+        </li>
+        {{!-- Setting --}}
+        <li class="nav-item">
+          <a href="/dashboard/setting" id="setting-link" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-sharp fa-solid fa-gear nav-icon"></i>
+            <p>Settings</p>
+          </a>
+        </li>
+
+
+        {{/ifEquals}}
+
+
+        {{!-- for regulator --}}
+        {{#ifEquals user.role "regulator"}}
+        <!-- Package -->
+        <li class="nav-item">
+          <a href="/dashboard/courses" id="courses" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="nav-icon fas fa-book"></i>
+            <p>Courses</p>
+          </a>
+        </li>
+        {{#if salesperson}}
+        {{>salesperson/mainSidebar}}
+        <li class="nav-item">
+          <a href="/dashboard/" class="nav-link">
+            {{!-- <i class="far fa-circle nav-icon"></i> --}}
+            <i class="fa-solid fa-home nav-icon"></i>
+            <p>Real Estate</p>
+          </a>
+        </li>
+        {{/if}}
+        {{/ifEquals}}
+        {{/if}}<!--salesperson-->
+      </ul>
+      <ul class="nav nav-pills nav-sidebar flex-column" style="position:absolute;bottom:10px" data-widget="treeview"
+        role="menu" data-accordion="false">
         <li class="nav-item">
           <a href="/logout" id="logout" class="nav-link bg-danger">
             <i class="nav-icon fas fa-sign-out-alt"></i>
-            <p>
-              Logout
+            <p class="text-capitalize">
+              {{#if user.loginAsStudent}}Logout As {{user.role}}{{else}} Logout{{/if}}
             </p>
           </a>
         </li>
       </ul>
     </nav>
-    <!-- /.sidebar-menu -->
   </div>
+  <!-- /.sidebar-menu -->
   <!-- /.sidebar -->
 </aside>

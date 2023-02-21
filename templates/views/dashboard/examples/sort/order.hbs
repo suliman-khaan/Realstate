@@ -1,0 +1,84 @@
+{{>dashboardheader}}
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Order</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Sort</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 65px;">S.No</th>
+                                                <th>Course Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#if courses}}
+                                            {{#each courses}}
+                                            <tr>
+                                                <td>{{increment @index}}</td>
+                                                <td>
+                                                    <a href="/dashboard/sort/course/{{this._id}}">{{this.name}}</a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                            {{else}}
+                                            <tr>
+                                                <td colspan="2">No course found. Please add course to see. </td>
+                                            </tr>
+                                            {{/if}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    {{>dashboardfooterlinks}}
+    </script>
+</body>
+
+</html>
