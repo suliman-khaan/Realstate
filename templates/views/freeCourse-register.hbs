@@ -81,12 +81,12 @@
         </div>
     </main>
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{reCaptchaSiteKey}}"></script>
+    {{!-- <script src="https://www.google.com/recaptcha/api.js?render={{reCaptchaSiteKey}}"></script>
     <script>
         grecaptcha.ready(function () {
             grecaptcha.execute('{{reCaptchaSiteKey}}', { action: 'freeLesson-register' }).then(function (token) {
                 document.getElementById('g-recaptcha-response').value = token;
             });
         });
-    </script>
+    </script> --}}
     {{>footer}}

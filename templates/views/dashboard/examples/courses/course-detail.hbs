@@ -153,7 +153,8 @@
                                                     <button type="button" class="btn p-0 text-blue" id="start" {{#if
                                                         this.unlock}}data-toggle="modal" data-target="#modal-default"
                                                         data-banner="/images/course/{{this.banner}}"
-                                                        data-link="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{/if}}>
+                                                        data-link="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
+                                                        {{/if}}>
                                                         {{this.name}}
                                                     </button>
                                                     {{else}}
@@ -196,8 +197,12 @@
                                                 </td>
                                             </tr>
                                             {{/each}}
+                                            {{else}}
+                                            <tr>
+                                                <td colspan="3">No courses found.</td>
+                                            </tr>
                                             {{/if}}
-                                            {{#if user.salesperson}}
+                                            {{!-- {{#if user.salesperson}}
                                             <tr>
                                                 <td colspan="2"><a class="text-capitalize" target="_blank"
                                                         href="/dashboard/salesperson/">Salesperson</a></td>
@@ -212,7 +217,7 @@
                                             <tr>
                                                 <td colspan="3">No courses found.</td>
                                             </tr>
-                                            {{/ifCond}}
+                                            {{/ifCond}} --}}
                                         </tbody>
                                     </table>
                                     {{!-- Agreement Modal --}}
@@ -310,7 +315,8 @@
                                                     <button type="button" class="btn p-0 text-blue" id="start" {{#if
                                                         this.unlock}}data-toggle="modal" data-target="#modal-default"
                                                         data-banner="/images/course/{{this.banner}}"
-                                                        data-link="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{/if}}>
+                                                        data-link="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
+                                                        {{/if}}>
                                                         {{this.name}}
                                                     </button>
                                                     {{else}}

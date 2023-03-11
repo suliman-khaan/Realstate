@@ -172,6 +172,7 @@
     {{!--for form validations --}}
     <script src="./js/form-validations.js"></script>
     {{>footer}}
+    {{!--
     <script src="https://www.google.com/recaptcha/api.js?render={{reCaptchaSiteKey}}"></script>
     <script>
         grecaptcha.ready(function () {
@@ -180,6 +181,8 @@
                 document.getElementById('g-recaptcha-response-sign').value = token;
             });
         });
+    </script> --}}
+    <script>
         var err = `{{{err}}}`
         if (err) {
             new bootstrap.Modal(document.getElementById("registrationModal")).show()

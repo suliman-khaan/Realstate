@@ -150,7 +150,8 @@
                       {{#each userCourses}}
                       <tr>
                         <td>
-                          <a class="text-capitalize" href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}">{{this.name}}</a>
+                          <a class="text-capitalize"
+                            href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}">{{this.name}}</a>
                         </td>
                         <td class="text-right">
                           <a href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" class="text-muted">
@@ -224,8 +225,9 @@
                             {{this.name}}
                           </button>
                           {{else}}
-                          {{!-- <a class="text-capitalize" {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
-                            {{else}} href="#" {{/if}}>{{this.name}}</a> --}}
+                          {{!-- <a class="text-capitalize" {{#if
+                            this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{else}}
+                            href="#" {{/if}}>{{this.name}}</a> --}}
                           <a class="text-capitalize" {{#if
                             this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{else}}
                             href="#" {{/if}}>{{this.name}}</a>
@@ -250,8 +252,8 @@
                             {{/unless}}
                           </button>
                           {{else}}
-                          <a {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{else}} href="#" {{/if}}
-                            class="text-muted">
+                          <a {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
+                            {{else}} href="#" {{/if}} class="text-muted">
                             {{#unless this.unlock}}
                             <i class="fa-solid fa-lock"></i>
                             {{else}}
@@ -262,8 +264,12 @@
                         </td>
                       </tr>
                       {{/each}}
+                      {{else}}
+                      <tr>
+                        <td colspan="3">No courses found.</td>
+                      </tr>
                       {{/if}}
-                      {{#if user.salesperson}}
+                      {{!-- {{#if user.salesperson}}
                       <tr>
                         <td colspan="2"><a class="text-capitalize" target="_blank"
                             href="/dashboard/salesperson/">Salesperson</a></td>
@@ -277,7 +283,7 @@
                       <tr>
                         <td colspan="3">No courses found.</td>
                       </tr>
-                      {{/ifCond}}
+                      {{/ifCond}} --}}
                     </tbody>
                   </table>
                 </div>
@@ -416,8 +422,9 @@
                             {{this.name}}
                           </button>
                           {{else}}
-                          <a class="text-capitalize" {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
-                            {{else}} href="#" {{/if}}>{{this.name}}</a>
+                          <a class="text-capitalize" {{#if
+                            this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{else}}
+                            href="#" {{/if}}>{{this.name}}</a>
                           {{/unless}}
                         </td>
                         <td>
@@ -439,8 +446,8 @@
                             {{/unless}}
                           </button>
                           {{else}}
-                          <a {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}" {{else}} href="#" {{/if}}
-                            class="text-muted">
+                          <a {{#if this.unlock}}href="/dashboard/view-chapter/{{this._id}}/{{this.chapters.[0]}}"
+                            {{else}} href="#" {{/if}} class="text-muted">
                             {{#unless this.unlock}}
                             <i class="fa-solid fa-lock"></i>
                             {{else}}

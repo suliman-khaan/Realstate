@@ -113,13 +113,11 @@ const buyMore = require("../controllers/buy-more");
 const freeLesson = require("../controllers/freeCourseRegistration");
 const freeLessonValidation = require("../middleware/freeLessonValidation");
 const { theme, doTheme } = require("../controllers/theme");
-const { checkFontURL } = require("../middleware/checkFont");
 const {
   stripeKeyValidation,
   paypalKeyValidation,
   verifyMail,
 } = require("../middleware/setting");
-const reCAPTCHA = require("../middleware/reCAPTCHA");
 const salespersonRoutes = require("./salesperson/index");
 const Course = require("../models/courses");
 
@@ -188,7 +186,7 @@ router.post("/register-coupon", couponRegisterAPI);
 
 // middleware for all dashboard route
 router.use("/dashboard", authenticated);
-router.use("/dashboard/salesperson", salespersonRoutes);
+// router.use("/dashboard/salesperson", salespersonRoutes);
 
 // main-dashboard
 router.get("/dashboard", dashboard);
