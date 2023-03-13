@@ -201,7 +201,7 @@ router.post(
   "/dashboard/setting",
   logoUpload.single("logo"),
   stripeKeyValidation,
-  // paypalKeyValidation,
+  paypalKeyValidation,
   verifyMail,
   doSetting,
   settingError

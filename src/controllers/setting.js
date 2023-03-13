@@ -111,7 +111,7 @@ module.exports = {
         errors.push(...paymentError, ...mailError);
         if (errors.length) {
           let error = errors[0];
-          let msg = error.stripe?.secret ?? error.stripe?.public ?? error;
+          let msg = error.stripe ?? error.paypal ?? error;
           settingData.logoPath = `/images/${
             settingData.logoPath || "logo.png"
           }`;
