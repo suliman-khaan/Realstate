@@ -11,6 +11,6 @@ module.exports = {
   },
   site: {
     name: "Host A Class",
-    logo: "/dashboard/dist/img/logo.png",
+    logo: "https://ui-avatars.com/api/?name=Host+A+Class&rounded=true",
   },
 };
