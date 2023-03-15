@@ -285,6 +285,19 @@ const viewChapter = async (req, res) => {
           }
           return 0;
         });
+
+        let indexOfChapter = contents.findIndex(
+          (content) => content?._id.toString() == chapter._id
+        );
+
+        // move to next when click mark as completed.
+        let next;
+        if (indexOfChapter < contents.length - 1) {
+          let nextContent = contents[indexOfChapter + 1];
+          let { type, _id } = nextContent;
+          next = { type, id: _id };
+        }
+
         const setting = await Setting.findOne();
         // quiz policy when completed the the previous
         if (
@@ -292,7 +305,7 @@ const viewChapter = async (req, res) => {
           req.user.role != "guest"
         ) {
           // unlocking the next content when the previous is completed
-          // else: if accessAlltime or if there is no setting in the database then unlock all
+          // else: if accessAllTime or if there is no setting in the database then unlock all
           if (contents.length) {
             for await (let [index] of contents.entries()) {
               if (!contents[index].unlock) {
@@ -383,6 +396,7 @@ const viewChapter = async (req, res) => {
           chapter,
           courseId: course._id,
           contents,
+          next,
           timeForExam: {
             final: setting?.finalTakeTime,
             mid: setting?.midTakeTime,
