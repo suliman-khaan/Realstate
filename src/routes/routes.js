@@ -1,25 +1,16 @@
 const express = require("express");
 const router = new express.Router();
-const {
-  login,
-  postLogin,
-  signUp,
-  loginAsStudent,
-  logout,
-} = require("../controllers/auth");
+const { signUp, loginAsStudent, logout } = require("../controllers/auth");
 const {
   forgotPassword,
   doForgotPassword,
   doResetPassword,
   resetPassword,
 } = require("../controllers/reset-password");
-const authLocal = require("../middleware/auth-strategy");
 const {
   authenticated,
-  logged_in,
   isStudent,
   isAdmin,
-  verifiedAndPaid,
 } = require("../middleware/authentication");
 const signUpMiddleware = require("../middleware/authValidation");
 const {
@@ -118,7 +109,6 @@ const {
   paypalKeyValidation,
   verifyMail,
 } = require("../middleware/setting");
-const salespersonRoutes = require("./salesperson/index");
 const Course = require("../models/courses");
 
 // default route
