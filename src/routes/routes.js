@@ -152,10 +152,8 @@ router.get("/packages", async (req, res) => {
 });
 
 // auth route
-router.get("/", logged_in, login);
 router.get("/loginAsStudent", isAdmin, loginAsStudent);
 router.get("/login", (req, res) => res.redirect("/"));
-router.post("/login", verifiedAndPaid, authLocal, postLogin);
 router.get("/logout", logout);
 
 // forgot password
