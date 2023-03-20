@@ -8,6 +8,7 @@ const UserMeta = require("../models/user-meta");
 const Setting = require("../models/setting");
 const Result = require("../models/result");
 const { sendAgreement } = require("./mailServices");
+const { indexOf } = require("lodash");
 
 // chpaters detail
 const chapterDetail = async (req, res) => {
@@ -291,7 +292,7 @@ const viewChapter = async (req, res) => {
         );
 
         // move to next when click mark as completed.
-        let next;
+        let next={};
         if (indexOfChapter < contents.length - 1) {
           let nextContent = contents[indexOfChapter + 1];
           let { type, _id } = nextContent;
