@@ -9,7 +9,7 @@ const Course = require("../models/courses");
 const { encodeMsg } = require("../helper/createMsg");
 
 const login = (req, res) => {
-  res.render("login", {
+  res.render("frontpages/Login", {
     title: "Login",
     reCaptchaSiteKey: process.env.recaptcha_siteKey,
   });
