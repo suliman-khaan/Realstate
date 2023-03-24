@@ -66,7 +66,7 @@ var authenticated = async (req, res, next) => {
       return next();
     } else {
       req.flash("error", "Please! Login to continue.");
-      res.redirect("/login");
+      res.redirect("/");
     }
   } catch (error) {
     res.redirect("/");
@@ -83,7 +83,7 @@ var logged_in = (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.redirect("/login");
+    res.redirect("/");
   }
 };
 var isStudent = (req, res, next) => {

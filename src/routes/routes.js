@@ -110,7 +110,6 @@ const {
   verifyMail,
 } = require("../middleware/setting");
 const Course = require("../models/courses");
-const { home, feature, pricing, about, blog } = require("../controllers/frontpages/front");
 
 // default route
 router.get("/packages", async (req, res) => {
@@ -144,7 +143,7 @@ router.get("/packages", async (req, res) => {
 
 // auth route
 router.get("/loginAsStudent", isAdmin, loginAsStudent);
-router.get("/home", (req, res) => res.redirect("/"));
+router.get("/login", (req, res) => res.redirect("/"));
 router.get("/logout", logout);
 
 // forgot password
@@ -308,21 +307,11 @@ router.get("/trial/quiz/:courseID/:quizID", trial.quiz);
 // Free Lesson Registration
 router.get("/free-lesson", freeLesson.register);
 router.post("/free-lesson", freeLessonValidation, freeLesson.doRegister);
-
-// fornt pages
-router.get("/", home);
-router.get("/features", feature);
-router.get("/pricing", pricing);
-router.get("/about", about);
-router.get("/blog", blog);
-
-
 // error 500 page
 router.get("/500", (req, res) => res.render("500"));
 router.get("*", async (req, res) => {
   res.render("404", { title: "Page Not Found" });
 });
-
 
 // export all routes
 module.exports = router;

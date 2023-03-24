@@ -73,7 +73,7 @@ app.use(express.static(publicPath));
 
 app.use(config); // theme and app [name,logo] caching
 
-app.get("/login", logged_in, login);
+app.get("/", logged_in, login);
 app.post("/login",  verifiedAndPaid, authLocal, postLogin);
 
 app.use(underConstruction); // under construction
