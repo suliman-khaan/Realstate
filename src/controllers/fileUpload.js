@@ -84,15 +84,42 @@ const courseBanner = multer({
     fileSize: 10485760,
   },
   fileFilter(req, file, cb) {
-    if (
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg"
-    ) {
-      return cb(undefined, true);
-    }
-    cb(new Error("File should be image. Try again!"));
+    imageFileFilter(file, cb);
   },
+  // fileFilter(req, file, cb) {
+  //   if (
+  //     file.mimetype === "image/png" ||
+  //     file.mimetype === "image/jpg" ||
+  //     file.mimetype === "image/jpeg"
+  //   ) {
+  //     return cb(undefined, true);
+  //   }
+  //   cb(new Error("File should be image. Try again!"));
+  // },
+});
+const postImage = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, "public/images/posts"),
+    filename: (req, file, cb) => {
+      var name = `${
+        path.parse(file.originalname).name
+      }-${Date.now()}${path.extname(file.originalname)}`;
+      cb(null, name);
+    },
+    fileFilter(req, file, cb) {
+      imageFileFilter(file, cb);
+    },
+  }),
 });
 
-module.exports = { upload, logoUpload, userAvatar, courseBanner };
+function imageFileFilter(file, cb) {
+  const fileTypes = /jpeg|jpg|png|gif/;
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimeType = fileTypes.test(file.mimetype);
+  if (extname && mimeType) {
+    return cb(undefined, true);
+  } else {
+    cb(new Error("Error: Images only!"));
+  }
+}
+module.exports = { upload, logoUpload, userAvatar, courseBanner, postImage };

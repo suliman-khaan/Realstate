@@ -1,0 +1,165 @@
+{{>dashboardheader}}
+
+<head>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/dashboard/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/dashboard/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="/dashboard/plugins/summernote/summernote-bs4.min.css">
+    <style>
+        .select2-container--bootstrap4 .select2-results__option--highlighted,
+        .select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+            background-color: var(--primary-color) !important;
+        }
+    </style>
+</head>
+
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        {{>dashboardNavbar}}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {{>dashboardMainSidebar}}
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>{{#if post}}Edit{{else}}Add{{/if}} Post</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">{{#if post}}Edit{{else}}Add{{/if}} Post</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <form action="{{#if post}}/dashboard/edit{{else}}add{{/if}}-post" method="post">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">General</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                            title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    {{#if post}}
+                                    <input type="hidden" name="id" value="{{post._id}}">
+                                    {{/if}}
+                                    <div class="form-group">
+                                        <label for="inputName">Title</label>
+                                        <input type="text" id="inputName" required name="title" value="{{post.title}}"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Author</label>
+                                        <select name="author" class="form-control selectWithSearch text-capitalize"
+                                            style="width: 100%;" required>
+                                            <option value=""></option>
+                                            {{#each users}}
+                                            <option value="{{this._id}}" {{#ifEquals this._id
+                                                ../post.author}}selected{{/ifEquals}}>{{this.name}} ({{this.role}})
+                                            </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputStatus">Status</label>
+                                        <select id="inputStatus" required name="status"
+                                            class="form-control custom-select">
+                                            <option selected disabled value="">Select one</option>
+                                            <option {{#ifEquals post.status 'draft' }}selected{{/ifEquals}}
+                                                value="draft">Draft</option>
+                                            <option {{#ifEquals post.status 'publish' }}selected{{/ifEquals}}
+                                                value="publish">Publish</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Content</label>
+                                        <textarea id="summernote" name="content">
+                                            {{post.content}}
+                                        </textarea>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary float-right">{{#if
+                                        post}}Update{{else}}Add{{/if}} Post</button>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        {{>dashboardfooter}}
+    </div>
+    <!-- ./wrapper -->
+    {{>dashboardfooterlinks}}
+    <script src="/dashboard/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Summernote -->
+    <script src="/dashboard/plugins/summernote/summernote-bs4.min.js"></script>
+    <script>
+        //Initialize Select2 Elements
+        $('.selectWithSearch').select2({
+            placeholder: "Select Author",
+            dropdownCssClass: "text-capitalize",
+            theme: 'bootstrap4',
+        })
+        $('#summernote').summernote({
+            placeholder: "Write here.....",
+            height: 400,
+            callbacks: {
+                onImageUpload: function (files) {
+                    uploadFile(files, this)
+                }
+            }
+        })
+        function uploadFile(files, editor) {
+            let data = new FormData()
+            for (let i = 0; i < files.length; i++) {
+                data.append('image[]', files[i])
+            }
+
+            /*$.ajax({
+                url: "/post-image",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: "POST",
+                success: function (data) {
+                    $(editor).summernote('insertImage', data.url)
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + " " + errorThrown)
+                }
+            })*/
+        }
+
+    </script>
+</body>
+
+</html>

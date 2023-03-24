@@ -1,5 +1,4 @@
-<aside
-  class="main-sidebar sidebar-dark-primary elevation-4 d-flex flex-column overflow-hidden">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 d-flex flex-column overflow-hidden">
   <!-- Brand Logo -->
   <a href="/dashboard" class="brand-link">
     <img src="{{site_logo}}" alt="{{site_Title}}" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -198,6 +197,30 @@
               <a href="/dashboard/quiz-detail" id="quiz-detail-link" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Quizzes Detail</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {{!-- Posts --}}
+        <li class="nav-item">
+          <a href="#" id="post-link" class="nav-link">
+            <i class="nav-icon fa-solid fa-pen-to-square"></i>
+            <p>
+              Posts
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/dashboard/add-post" id="quiz-add-link" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Post</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/posts" id="quiz-detail-link" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>All Posts</p>
               </a>
             </li>
           </ul>
