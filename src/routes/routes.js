@@ -110,6 +110,7 @@ const {
   verifyMail,
 } = require("../middleware/setting");
 const Course = require("../models/courses");
+const { blog } = require("../controllers/blog");
 
 // default route
 router.get("/packages", async (req, res) => {
@@ -307,6 +308,10 @@ router.get("/trial/quiz/:courseID/:quizID", trial.quiz);
 // Free Lesson Registration
 router.get("/free-lesson", freeLesson.register);
 router.post("/free-lesson", freeLessonValidation, freeLesson.doRegister);
+
+// blog
+router.get('/blog', blog);
+
 // error 500 page
 router.get("/500", (req, res) => res.render("500"));
 router.get("*", async (req, res) => {
