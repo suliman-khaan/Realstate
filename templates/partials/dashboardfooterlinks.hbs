@@ -204,6 +204,18 @@
             $("#dashboard-link").removeClass("active")
             $('#theme-link').addClass("active")
         }
+        //post
+        if (url.includes("add-post")) {
+            $("#dashboard-link").removeClass("active")
+            $('#post-link').addClass("active")
+            $('#post-add-link').addClass("active")
+        }
+        //post
+        if (url.includes("posts")) {
+            $("#dashboard-link").removeClass("active")
+            $('#post-link').addClass("active")
+            $('#posts-link').addClass("active")
+        }
 
         //salesperson -- category
         if (url.includes("add-category")) {

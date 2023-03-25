@@ -14,13 +14,14 @@
   --ExtraBold: 800;
   --Black: 900;
   --primary-color: #2c5f2d;
+  --primary-shadow: rgba(44, 95, 45, .25);
   --secondary-color: #92c350;
   --pure-white: #ffffff;
   --black-text: #000000;
   --bg: #f2f9f0;
-  --heading: "PT Serif", serif;
-  --body: "PT Serif", serif;
   --font-family: "PT Serif", serif;
+  --heading: var(--font-family);
+  --body: var(--font-family);
 }
 
 /* --------------Typography------------------- */
@@ -183,7 +184,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(44, 95, 45, .8);
+  background-color: var(--primary-color);
   border-radius: 0px;
   transition: 0.3s all ease-in-out;
 }
@@ -191,7 +192,7 @@ body {
 /* Handle on hover */
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(44, 95, 45, 1);
+  background: var(--primary-shadow);
 }
 
 .row {
@@ -318,8 +319,9 @@ body {
 #navbar ul {
   margin-bottom: 0;
 }
-@media (max-width: 767px){
-  #navbar ul.menu .nav-item{
+
+@media (max-width: 767px) {
+  #navbar ul.menu .nav-item {
     margin: 18px 0;
 
   }
