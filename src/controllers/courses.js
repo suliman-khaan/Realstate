@@ -121,7 +121,7 @@ const updateCourse = async (req, res) => {
     const packages = await Package.find({ name: req.body.package }).select(
       "_id"
     );
-    const packageId = await Package.findOne({ name: data.package });
+
     const allPackages = await Package.find();
     const oldPath = course.banner;
     if (req.file) {
@@ -846,7 +846,8 @@ var viewCourse = async (req, res) => {
 var courseError = (error, req, res, next) => {
   console.log(error.message);
   var msg = encodeMsg(error.message, "danger", 500);
-  res.redirect("/dashboard/add-course?msg=" + msg);
+  res.redirect("/dashboard?msg=" + msg);
+  
 };
 
 module.exports = {

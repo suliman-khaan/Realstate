@@ -111,6 +111,8 @@ const {
 } = require("../middleware/setting");
 const Course = require("../models/courses");
 const { blog } = require("../controllers/blog");
+const post = require("../controllers/post");
+const { encodeMsg } = require("../helper/createMsg");
 
 // default route
 router.get("/packages", async (req, res) => {
@@ -304,6 +306,17 @@ router.get("/dashboard/read-message/:id", isAdmin, readMessage);
 
 router.get("/trial/chapter/:courseID/:chapterID", trial.chapter);
 router.get("/trial/quiz/:courseID/:quizID", trial.quiz);
+
+/* BLOGS */
+router.get("/dashboard/posts", post.allPosts);
+router.get("/dashboard/add-post", post.addPost);
+router.post("/dashboard/add-post", post.doPost);
+router.get("/dashboard/edit-post/", (req, res) =>
+  res.redirect("/dashboard/posts")
+);
+router.get("/dashboard/edit-post/:id", post.editPost);
+router.post("/dashboard/edit-post", post.doPost);
+// router.post('/post-image',)
 
 // Free Lesson Registration
 router.get("/free-lesson", freeLesson.register);
