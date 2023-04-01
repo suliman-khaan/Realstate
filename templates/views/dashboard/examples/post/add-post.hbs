@@ -114,6 +114,22 @@
         </div>
         <!-- /.content-wrapper -->
 
+        {{!-- alert --}}
+        <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 70px; right: 1%; z-index:1">
+    <div class="toast align-items-center  bg-danger
+        border-0" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+        <div class="d-flex">
+            <div class="toast-body flex-fill fileError">
+                <i
+                    class="fa-solid fa-circle-exclamation mr-2"></i>
+            </div>
+            <button type="button" class="btn text-white" data-dismiss="toast" aria-label="Close">
+                <i class="fa-solid fa-xmark" aria-hidden="true" style="font-size:14px"></i></button>
+
+        </div>
+    </div>
+</div>
+
         {{>dashboardfooter}}
     </div>
     <!-- ./wrapper -->
@@ -143,7 +159,7 @@
                 data.append('image[]', files[i])
             }
 
-            /*$.ajax({
+            $.ajax({
                 url: "/post-image",
                 data: data,
                 cache: false,
@@ -151,12 +167,15 @@
                 processData: false,
                 type: "POST",
                 success: function (data) {
-                    $(editor).summernote('insertImage', data.url)
+                    data.forEach((e)=>{
+                        $(editor).summernote("insertImage", `images/posts/${e.filename}`, e.filename)
+                    })
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus + " " + errorThrown)
+                    $('.toast').toast('show')
+                    $(".fileError").text(jqXHR.responseText)
                 }
-            })*/
+            })
         }
 
     </script>

@@ -110,7 +110,7 @@ const {
   verifyMail,
 } = require("../middleware/setting");
 const Course = require("../models/courses");
-const { blog } = require("../controllers/blog");
+const { blog, postImage } = require("../controllers/blog");
 const post = require("../controllers/post");
 const { encodeMsg } = require("../helper/createMsg");
 
@@ -324,6 +324,7 @@ router.post("/free-lesson", freeLessonValidation, freeLesson.doRegister);
 
 // blog
 router.get('/blog', blog);
+router.post("/post-image", authenticated, postImage);
 
 // error 500 page
 router.get("/500", (req, res) => res.render("500"));

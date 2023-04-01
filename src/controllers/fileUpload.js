@@ -105,20 +105,21 @@ const postImage = multer({
         path.parse(file.originalname).name
       }-${Date.now()}${path.extname(file.originalname)}`;
       cb(null, name);
-    },
-    fileFilter(req, file, cb) {
-      imageFileFilter(file, cb);
-    },
+    }
   }),
-});
+  fileFilter(req, file, cb) {
+    imageFileFilter(file, cb);
+  },
+}).array('image[]', 2);
 
 function imageFileFilter(file, cb) {
-  const fileTypes = /jpeg|jpg|png|gif/;
+  const fileTypes = /jpeg|jpg|png|gif|svg/;
   const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
   const mimeType = fileTypes.test(file.mimetype);
   if (extname && mimeType) {
     return cb(undefined, true);
   } else {
+    cb(null, false);
     cb(new Error("Error: Images only!"));
   }
 }
