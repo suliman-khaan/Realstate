@@ -20,7 +20,7 @@ module.exports = {
                         res.status(400).json('You can upload upto 2 maximum files');
                         return;
                       }
-                    res.status(400).json('Unknow error occured while uploading')
+                    res.status(400).json('Unknown error occurred while uploading')
                   } else if (err) {
                     res.status(400).json(err.message)
                   }else{
