@@ -1,11 +1,14 @@
 const { postImage } = require("./fileUpload");
-const multer = require("multer")
+const multer = require("multer");
+const Post = require('../models/post');
 
 module.exports = {
     async blog(req, res){
         try {
+            let blogPosts = await Post.find({status: 'publish'}).populate({path: 'author', select: ['name', 'avatar']})
             res.render('blog', {
-                title: 'Blog'
+                title: 'Blog',
+                blogPosts
             })
         } catch (e) {
             console.log(e);

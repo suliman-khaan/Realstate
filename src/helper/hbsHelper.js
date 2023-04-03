@@ -168,9 +168,14 @@ hbs.registerHelper("dateFormat", function (date) {
   if (day < 10) {
     day = "0" + day;
   }
+  console.log(d)
   return `${year}-${month}-${day}`;
 });
 
 hbs.registerHelper("JSON", (data) => {
   return JSON.stringify(data);
 });
+hbs.registerHelper("formatDate", (date)=>{
+  var d = date.split(',');
+  return d[0];
+})
