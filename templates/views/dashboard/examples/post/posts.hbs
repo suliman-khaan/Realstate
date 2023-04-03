@@ -52,7 +52,7 @@
                                                 <th>Status</th>
                                                 <th>Created At</th>
                                                 <th {{#ifEquals user.role "regulator" }}class="d-none" {{/ifEquals}}>
-                                                    Edit</th>
+                                                    Edit / Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -68,13 +68,13 @@
                                                             <i class="fa-solid fa-pen-to-square"></i>
                                                         </button>
                                                     </a>
-                                                    {{!-- <a
-                                                        href="/dashboard/package-detail/delete-package?pId={{this._id}}"
+                                                    <a
+                                                        href="/dashboard/delete-post/{{this._id}}"
                                                         type="button">
                                                         <button class="btn btn-danger">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </button>
-                                                    </a> --}}
+                                                    </a>
                                                 </td>
                                             </tr>
                                             {{/each}}

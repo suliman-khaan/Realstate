@@ -3,6 +3,7 @@ const Post = require("../models/post");
 const User = require("../models/users");
 const {postImage}= require('./fileUpload')
 const multer  = require('multer')
+const fs = require('fs');
 
 module.exports = {
   async allPosts(req, res) {
@@ -36,32 +37,43 @@ module.exports = {
   },
   async doPost(req, res) {
     try {
-      let id = req.body;
-      console.log(req.body)
-      if (id) {
-        console.log(req.body)
-        // updating the post
-        // await Post.findByIdAndUpdate(id, req.body);
-      } else {
-        // Adding new post
         postImage.single('featuredimage')(req, res, async (err)=>{
           if (err instanceof multer.MulterError) {
-              if (err.code === 'LIMIT_FILE_COUNT') {
-                console.log(400).json('You can upload upto 2 maximum files');
-                  return;
-                }
-              console.log('Unknown error occurred while uploading')
+              // console.log('Unknown error occurred while uploading')
+              res.status(400).redirect(
+                "/dashboard/posts?msg=" +
+                  encodeMsg('Unknown error occurred while uploading')
+              );
             } else if (err) {
-              console.log(err.message)
+              // console.log(err.message)
+              res.status(400).redirect(
+                "/dashboard/posts?msg=" +
+                  encodeMsg(err.message)
+              );
             }else{
+              let id = req.body.id;
+              console.log(id)
+              if (id) {
+                                // updating the post
+                if(req.file.filename){
+                  var oldimg = await Post.findById(id).select('image');
+                  fs.unlinkSync(`public${oldimg.image}`);
+                  await Post.findByIdAndUpdate(id, {image: req.file.filename, ...req.body});
+                }
+                else{
+                await Post.findByIdAndUpdate(id, req.body);
+                }
+              } else {
+                // Adding new post
               await Post({image: req.file.filename, ...req.body}).save();
             }
+            return res.redirect(
+              "/dashboard/posts?msg=" +
+                encodeMsg(`Post ${id ? "Updated" : "Added"} Successfully.`)
+            );
+            }
       })
-      }
-      return res.redirect(
-        "/dashboard/posts?msg=" +
-          encodeMsg(`Post ${id ? "Updated" : "Added"} Successfully.`)
-      );
+
     } catch (err) {
       res.redirect("/dashboard?msg=" + encodeMsg(err.message, "danger"));
     }
@@ -82,4 +94,17 @@ module.exports = {
       users,
     });
   },
+  async deletePost(req, res){
+    let id  = req.params.id;
+    if(!id){
+      return res.redirect(
+        "/posts?msg=" + encodeMsg("Post is required.", "danger")
+      );
+    }
+    let post = await Post.findById(id);
+    await Post.findByIdAndDelete(id);
+    fs.unlinkSync(`public${post.image}`);
+    return res.redirect('/dashboard/posts?msg=' + encodeMsg("Post deleted succesfully.", "success"));
+
+  }
 };
