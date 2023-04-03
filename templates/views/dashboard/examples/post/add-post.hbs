@@ -83,7 +83,7 @@
                                        <div class="form-group">
                                         <label for="inputName">Featured Image</label><br>
                                         <input type="file" id="inputName" {{#unless post._id}}required {{/unless}} name="featuredimage"
-                                            class="">
+                                            class="" accept="image/*">
                                             <div style="width: 120px; display: inline-flex;"><img src="{{post.image}}" class="w-100" alt=""></div>
                                     </div>
                                     <div class="form-group">
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                                    <button type="reset" class="btn btn-secondary" onclick="window.history.back();">Cancel</button>
                                     <button type="submit" class="btn btn-primary float-right">{{#if
                                         post}}Update{{else}}Add{{/if}} Post</button>
                                 </div>
