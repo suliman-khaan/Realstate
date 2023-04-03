@@ -1,6 +1,8 @@
 const { encodeMsg, decodeMsg } = require("../helper/createMsg");
 const Post = require("../models/post");
 const User = require("../models/users");
+const {postImage}= require('./fileUpload')
+const multer  = require('multer')
 
 module.exports = {
   async allPosts(req, res) {
@@ -34,14 +36,27 @@ module.exports = {
   },
   async doPost(req, res) {
     try {
-      let id = req.body.id;
+      let id = req.body;
+      console.log(req.body)
       if (id) {
         console.log(req.body)
         // updating the post
-        await Post.findByIdAndUpdate(id, req.body);
+        // await Post.findByIdAndUpdate(id, req.body);
       } else {
         // Adding new post
-        await Post(req.body).save();
+        postImage.single('featuredimage')(req, res, async (err)=>{
+          if (err instanceof multer.MulterError) {
+              if (err.code === 'LIMIT_FILE_COUNT') {
+                console.log(400).json('You can upload upto 2 maximum files');
+                  return;
+                }
+              console.log('Unknown error occurred while uploading')
+            } else if (err) {
+              console.log(err.message)
+            }else{
+              await Post({image: req.file.filename, ...req.body}).save();
+            }
+      })
       }
       return res.redirect(
         "/dashboard/posts?msg=" +

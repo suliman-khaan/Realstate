@@ -14,7 +14,7 @@ module.exports = {
     },
     async postImage(req, res) {
         try {
-            postImage(req, res, (err)=>{
+            postImage.array('image[]', 2)(req, res, (err)=>{
                 if (err instanceof multer.MulterError) {
                     if (err.code === 'LIMIT_FILE_COUNT') {
                         res.status(400).json('You can upload upto 2 maximum files');

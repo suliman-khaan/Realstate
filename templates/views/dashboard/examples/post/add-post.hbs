@@ -45,12 +45,12 @@
 
             <!-- Main content -->
             <section class="content">
-                <form action="{{#if post}}/dashboard/edit{{else}}add{{/if}}-post" method="post">
+                <form action="{{#if post}}/dashboard/edit{{else}}add{{/if}}-post" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-12">
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title">General</h3>
+                                    <h3 class="card-title">Posts</h3>
 
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse"
@@ -79,6 +79,12 @@
                                             </option>
                                             {{/each}}
                                         </select>
+                                    </div>
+                                       <div class="form-group">
+                                        <label for="inputName">Featured Image</label><br>
+                                        <input type="file" id="inputName" {{#unless post._id}}required {{/unless}} name="featuredimage"
+                                            class="">
+                                            <div style="width: 120px; display: inline-flex;"><img src="{{post.image}}" class="w-100" alt=""></div>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputStatus">Status</label>
@@ -172,7 +178,7 @@
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     $('.toast').toast('show')
-                    $(".fileError").text(jqXHR.responseText)
+                    $(".fileError").text(JSON.parse(jqXHR.responseText))
                 }
             })
         }

@@ -110,7 +110,7 @@ const postImage = multer({
   fileFilter(req, file, cb) {
     imageFileFilter(file, cb);
   },
-}).array('image[]', 2);
+});
 
 function imageFileFilter(file, cb) {
   const fileTypes = /jpeg|jpg|png|gif|svg/;
@@ -120,7 +120,7 @@ function imageFileFilter(file, cb) {
     return cb(undefined, true);
   } else {
     cb(null, false);
-    cb(new Error("Error: Images only!"));
+    cb(new Error("Images only!"));
   }
 }
 module.exports = { upload, logoUpload, userAvatar, courseBanner, postImage };

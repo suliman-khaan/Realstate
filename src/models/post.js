@@ -9,7 +9,12 @@ const postSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    image: String,
+    image:{
+      type: String,
+      get: function (img) {
+        if (img) return `/images/posts/${img}`;
+      },
+    },
     status: String,
   },
   {
