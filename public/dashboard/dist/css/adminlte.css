@@ -37674,13 +37674,13 @@ body.iframe-mode-fullscreen .content-wrapper.iframe-mode {
 }
 
 .select2-container--default .select2-results__option--highlighted {
-  background-color: var(--primary-color)!important;
+  background-color: #007bff;
   color: #fff;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected],
 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-  background-color: var(--secondary-color)!important;
+  background-color: #0074f0;
   color: #fff;
 }
 
@@ -50295,7 +50295,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 a.text-muted:hover {
-  color: #007bff !important;
+  color: var(--secondary-color) !important;
 }
 
 .link-muted {
