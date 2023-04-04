@@ -50295,7 +50295,7 @@ blockquote.quote-gray-dark h6 {
 }
 
 a.text-muted:hover {
-  color: #007bff !important;
+  color: var(--secondary-color) !important;
 }
 
 .link-muted {
