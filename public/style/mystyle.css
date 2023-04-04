@@ -443,6 +443,10 @@ body {
 .articles .single-item {
   height: 100%;
   display: grid;
+  transition: 0.3s all ease-in-out;
+}
+.articles .single-item:hover {
+  transform: scale(1.03);
 }
 
 .articles .single-item h5 {
@@ -456,12 +460,13 @@ body {
 .articles .single-item .meta .author_img {
   width: 40px !important;
   height: 40px !important;
+  border-radius: 50%;
+  object-fit: cover !important;
 }
 
 .articles .single-item .meta .author_img>img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important;
 }
 
 .articles .single-item .meta .author_content {

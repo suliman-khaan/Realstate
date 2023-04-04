@@ -84,6 +84,30 @@
     <section class="articles">
         <div class="container">
             <div class="row">
+                    {{!-- -------------posts------------- --}}
+                    {{#if blogPosts}}
+                    {{#each blogPosts}}
+                <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
+                    <a href="/posts/single-post/{{this.id}}">
+                        <article class="single-item">
+                            <img src="{{this.image}}"
+                                alt="education-or-business-office-workspace-concept" class="w-100">
+                            <h5 class="h5  text-black">{{this.title}}</h5>
+                            <div class="meta d-flex">
+                                <div class="author_img"><img
+                                        src="{{#if this.avatar}}{{this.avatar}}{{else}}/images/Assets/pngegg.png{{/if}}"
+                                        alt="happy-male-student-online-teacher-wear-headphone" class="w-100"></div>
+                                <div class="author_content">
+                                    <h6 class="h6  text-black"><b>{{this.author.name}}</b></h6>
+                                    <p>{{formatDate this.createdAt}}</p>
+                                </div>
+                            </div>
+                        </article>
+                        </a>
+                </div>
+                    {{/each}}
+                    {{/if}}
+                    {{!-- -------------------- --}}
                 <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
                     <article class="single-item">
                         <img src="/images/Assets/education-or-business-office-workspace-concept-moc-2022-11-11-07-07-49-utc.jpg"

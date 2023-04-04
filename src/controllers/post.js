@@ -37,35 +37,33 @@ module.exports = {
   },
   async doPost(req, res) {
     try {
-        postImage.single('featuredimage')(req, res, async (err)=>{
+        postImage.any()(req, res, async (err)=>{
           if (err instanceof multer.MulterError) {
-              // console.log('Unknown error occurred while uploading')
               res.status(400).redirect(
                 "/dashboard/posts?msg=" +
-                  encodeMsg('Unknown error occurred while uploading')
+                  encodeMsg('Unknown error occurred while uploading', "danger")
               );
             } else if (err) {
-              // console.log(err.message)
               res.status(400).redirect(
                 "/dashboard/posts?msg=" +
-                  encodeMsg(err.message)
+                  encodeMsg(err.message, "danger")
               );
             }else{
               let id = req.body.id;
-              console.log(id)
+              let featuredimg = req.files.findIndex((e)=> e.fieldname == "featuredimage");
               if (id) {
                                 // updating the post
-                if(req.file.filename){
+                if(req.files[featuredimg].filename){
                   var oldimg = await Post.findById(id).select('image');
                   fs.unlinkSync(`public${oldimg.image}`);
-                  await Post.findByIdAndUpdate(id, {image: req.file.filename, ...req.body});
+                  await Post.findByIdAndUpdate(id, {image: req.files[featuredimg].filename, ...req.body});
                 }
                 else{
                 await Post.findByIdAndUpdate(id, req.body);
                 }
               } else {
                 // Adding new post
-              await Post({image: req.file.filename, ...req.body}).save();
+              await Post({image: req.files[featuredimg].filename, ...req.body}).save();
             }
             return res.redirect(
               "/dashboard/posts?msg=" +
@@ -103,7 +101,11 @@ module.exports = {
     }
     let post = await Post.findById(id);
     await Post.findByIdAndDelete(id);
-    fs.unlinkSync(`public${post.image}`);
+    if(fs.existsSync(`public${post.image}`)){
+      fs.unlink(`public${post.image}`, (err)=>{
+        console.log(err)
+      });
+    }
     return res.redirect('/dashboard/posts?msg=' + encodeMsg("Post deleted succesfully.", "success"));
 
   }
