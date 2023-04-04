@@ -384,7 +384,8 @@
         const quizType = `{{{quiz.type}}}`
         const takenQuiz = `{{{takenQuiz}}}`;
         const examTime = quizType == "final" ? Number(`{{{timeForExam.final}}}`) * 60 : quizType == "mid" ? Number(`{{{timeForExam.mid}}}`) * 60 : 0;
-        const showNextBtn = `{{{next.showBtn}}}`
+        const isShowNextBtn = `{{{next.showBtn}}}`;
+        const showNextBtn = isShowNextBtn === 'true'
     </script>
     <script src="/js/quiz-take.js"></script>
 </body>

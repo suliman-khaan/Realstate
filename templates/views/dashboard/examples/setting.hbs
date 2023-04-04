@@ -780,7 +780,7 @@
                                                         {{/if}}
                                                     </div>
                                                     {{#if editUser.avatar}}
-                                                    <div class="col-2 text-center">
+                                                    <div class="col-2 text-center img-container">
                                                         <input type="hidden" id="hiddenField"
                                                             value="{{editUser.avatar}}" name="hiddenImg">
                                                         <img src="data:image/jpg;base64,{{editUser.avatar}}"
@@ -931,7 +931,7 @@
         $(document).ready(function () {
             $('[data-mask]').inputmask()
             $("#removeBtn").click(function () {
-                $("#rmImg").attr("src", "")
+                $("#rmImg").parents().find('.img-container').addClass("d-none")
                 $("#hiddenField").attr("value", "")
             })
             if ($("#reviewQuiz").prop("checked")) {
