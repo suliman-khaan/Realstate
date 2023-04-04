@@ -110,7 +110,7 @@ const {
   verifyMail,
 } = require("../middleware/setting");
 const Course = require("../models/courses");
-const { blog, postImage } = require("../controllers/blog");
+const { blog, postImage, singlepost} = require("../controllers/blog");
 const post = require("../controllers/post");
 const { encodeMsg } = require("../helper/createMsg");
 
@@ -317,6 +317,7 @@ router.get("/dashboard/edit-post/", (req, res) =>
 router.get("/dashboard/edit-post/:id", post.editPost);
 router.post("/dashboard/edit-post", post.doPost);
 router.get('/dashboard/delete-post/:id', authenticated ,post.deletePost);
+router.get('/dashboard/posts/single-post/:id', authenticated , singlepost);
 // router.post('/post-image',)
 
 // Free Lesson Registration
