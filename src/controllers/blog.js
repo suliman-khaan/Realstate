@@ -11,8 +11,7 @@ module.exports = {
                 blogPosts
             })
         } catch (e) {
-            console.log(e);
-            res.redirect('/500');
+            res.redirect('/blog');
         }
     },
     async postImage(req, res) {
@@ -26,27 +25,29 @@ module.exports = {
                     res.status(400).json('Unknown error occurred while uploading')
                   } else if (err) {
                     res.status(400).json(err.message)
-                  }else{
+                }else{
                     res.status(200).json(req.files)
-                  }
+                }
             })
         } catch (error) {
             console.log(e);
-            res.redirect('/500');
+            res.status(500).json(err.message)
         }
     },
     async singlepost(req, res){
         try {
             let id = req.params.id;
+            if(!id) return res.redirect('/blog')
             let postData = await Post.findById(id).populate({path: 'author', select: ['name', 'avatar']});
-            res.render('dashboard/examples/post/singlePost', {
-                title: 'Single Post',
-                postData
-            })
-            
+            if(postData){
+                res.render('dashboard/examples/post/singlePost', {
+                    title: 'Single Post',
+                    postData
+                })
+            }
+            return res.redirect('/blog');
         } catch (error) {
-            console.log(e);
-            res.redirect('/500');
+            res.redirect('/blog');
         }
     }
 }
