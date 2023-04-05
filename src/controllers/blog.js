@@ -40,7 +40,7 @@ module.exports = {
             if(!id) return res.redirect('/blog')
             let postData = await Post.findById(id).populate({path: 'author', select: ['name', 'avatar']});
             if(postData){
-                res.render('dashboard/examples/post/singlePost', {
+                return res.render('dashboard/examples/post/singlePost', {
                     title: 'Single Post',
                     postData
                 })
