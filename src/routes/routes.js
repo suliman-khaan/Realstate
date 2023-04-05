@@ -317,7 +317,7 @@ router.get("/dashboard/edit-post/", (req, res) =>
 router.get("/dashboard/edit-post/:id", post.editPost);
 router.post("/dashboard/edit-post", post.doPost);
 router.get('/dashboard/delete-post/:id', authenticated ,post.deletePost);
-router.get('/dashboard/posts/single-post/:id', authenticated , singlepost);
+router.get('/post/:id', authenticated , singlepost);
 // router.post('/post-image',)
 
 // Free Lesson Registration
