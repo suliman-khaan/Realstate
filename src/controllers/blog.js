@@ -34,7 +34,7 @@ module.exports = {
             res.status(500).json(err.message)
         }
     },
-    async singlepost(req, res){
+    async singlePost(req, res){
         try {
             let id = req.params.id;
             if(!id) return res.redirect('/blog')

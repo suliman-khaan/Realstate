@@ -110,9 +110,8 @@ const {
   verifyMail,
 } = require("../middleware/setting");
 const Course = require("../models/courses");
-const { blog, postImage, singlepost} = require("../controllers/blog");
+const { blog, postImage, singlePost } = require("../controllers/blog");
 const post = require("../controllers/post");
-const { encodeMsg } = require("../helper/createMsg");
 
 // default route
 router.get("/packages", async (req, res) => {
@@ -308,16 +307,16 @@ router.get("/trial/chapter/:courseID/:chapterID", trial.chapter);
 router.get("/trial/quiz/:courseID/:quizID", trial.quiz);
 
 /* BLOGS */
-router.get("/dashboard/posts", post.allPosts);
-router.get("/dashboard/add-post", post.addPost);
-router.post("/dashboard/add-post", post.doPost);
+router.get("/dashboard/posts", isAdmin, post.allPosts);
+router.get("/dashboard/add-post", isAdmin, post.addPost);
+router.post("/dashboard/add-post", isAdmin, post.doPost);
 router.get("/dashboard/edit-post/", (req, res) =>
   res.redirect("/dashboard/posts")
 );
-router.get("/dashboard/edit-post/:id", post.editPost);
-router.post("/dashboard/edit-post", post.doPost);
-router.get('/dashboard/delete-post/:id', authenticated ,post.deletePost);
-router.get('/post/:id', authenticated , singlepost);
+router.get("/dashboard/edit-post/:id", isAdmin, post.editPost);
+router.post("/dashboard/edit-post", isAdmin, post.doPost);
+router.get("/dashboard/delete-post/:id", isAdmin, post.deletePost);
+router.get("/post/:id", singlePost);
 // router.post('/post-image',)
 
 // Free Lesson Registration
@@ -325,8 +324,8 @@ router.get("/free-lesson", freeLesson.register);
 router.post("/free-lesson", freeLessonValidation, freeLesson.doRegister);
 
 // blog
-router.get('/blog', blog);
-router.post("/post-image", authenticated, postImage);
+router.get("/blog", blog);
+router.post("/post-image", isAdmin, postImage);
 
 // error 500 page
 router.get("/500", (req, res) => res.render("500"));
