@@ -34,5 +34,19 @@ module.exports = {
             console.log(e);
             res.redirect('/500');
         }
+    },
+    async singlepost(req, res){
+        try {
+            let id = req.params.id;
+            let postData = await Post.findById(id).populate({path: 'author', select: ['name', 'avatar']});
+            res.render('dashboard/examples/post/singlePost', {
+                title: 'Single Post',
+                postData
+            })
+            
+        } catch (error) {
+            console.log(e);
+            res.redirect('/500');
+        }
     }
 }
