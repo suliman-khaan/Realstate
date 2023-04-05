@@ -8,43 +8,14 @@
     <title>{{title}}</title>
     <link rel="shortcut icon" href="{{site_logo}}" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
-    <link
-        href="https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Acme|Alegreya|Alegreya+Sans|Anton|Archivo|Archivo+Black|Archivo+Narrow|Arimo|Arvo|Asap|Asap+Condensed|Bitter|Bowlby+One+SC|Bree+Serif|Cabin|Cairo|Catamaran|Crete+Round|Crimson+Text|Cuprum|Dancing+Script|Dosis|Droid+Sans|Droid+Serif|EB+Garamond|Exo|Exo+2|Faustina|Fira+Sans|Fjalla+One|Francois+One|Gloria+Hallelujah|Hind|Inconsolata|Indie+Flower|Josefin+Sans|Julee|Karla|Lato|Libre+Baskerville|Libre+Franklin|Lobster|Lora|Mada|Manuale|Maven+Pro|Merriweather|Merriweather+Sans|Montserrat|Montserrat+Subrayada|Mukta+Vaani|Muli|Noto+Sans|Noto+Serif|Nunito|Open+Sans|Open+Sans+Condensed:300|Oswald|Oxygen|PT+Sans|PT+Sans+Caption|PT+Sans+Narrow|PT+Serif|Pacifico|Passion+One|Pathway+Gothic+One|Play|Playfair+Display|Poppins|Questrial|Quicksand|Raleway|Roboto|Roboto+Condensed|Roboto+Mono|Roboto+Slab|Ropa+Sans|Rubik|Saira|Saira+Condensed|Saira+Extra+Condensed|Saira+Semi+Condensed|Sedgwick+Ave|Sedgwick+Ave+Display|Shadows+Into+Light|Signika|Slabo+27px|Source+Code+Pro|Source+Sans+Pro|Spectral|Titillium+Web|Ubuntu|Ubuntu+Condensed|Varela+Round|Vollkorn|Work+Sans|Yanone+Kaffeesatz|Zilla+Slab|Zilla+Slab+Highlight"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Acme|Alegreya|Alegreya+Sans|Anton|Archivo|Archivo+Black|Archivo+Narrow|Arimo|Arvo|Asap|Asap+Condensed|Bitter|Bowlby+One+SC|Bree+Serif|Cabin|Cairo|Catamaran|Crete+Round|Crimson+Text|Cuprum|Dancing+Script|Dosis|Droid+Sans|Droid+Serif|EB+Garamond|Exo|Exo+2|Faustina|Fira+Sans|Fjalla+One|Francois+One|Gloria+Hallelujah|Hind|Inconsolata|Indie+Flower|Josefin+Sans|Julee|Karla|Lato|Libre+Baskerville|Libre+Franklin|Lobster|Lora|Mada|Manuale|Maven+Pro|Merriweather|Merriweather+Sans|Montserrat|Montserrat+Subrayada|Mukta+Vaani|Muli|Noto+Sans|Noto+Serif|Nunito|Open+Sans|Open+Sans+Condensed:300|Oswald|Oxygen|PT+Sans|PT+Sans+Caption|PT+Sans+Narrow|PT+Serif|Pacifico|Passion+One|Pathway+Gothic+One|Play|Playfair+Display|Poppins|Questrial|Quicksand|Raleway|Roboto|Roboto+Condensed|Roboto+Mono|Roboto+Slab|Ropa+Sans|Rubik|Saira|Saira+Condensed|Saira+Extra+Condensed|Saira+Semi+Condensed|Sedgwick+Ave|Sedgwick+Ave+Display|Shadows+Into+Light|Signika|Slabo+27px|Source+Code+Pro|Source+Sans+Pro|Spectral|Titillium+Web|Ubuntu|Ubuntu+Condensed|Varela+Round|Vollkorn|Work+Sans|Yanone+Kaffeesatz|Zilla+Slab|Zilla+Slab+Highlight" rel="stylesheet">
     <link rel="stylesheet" href="/style/mystyle.css" />
-    <style>
-        :root {
-            --primary-color: {
-                    {
-                    theme.colors.primary
-                }
-            }
-
-            ;
-
-            --primary-shadow: {
-                    {
-                    theme.colors.primaryShadow
-                }
-            }
-
-            ;
-
-            --secondary-color: {
-                    {
-                    theme.colors.secondary
-                }
-            }
-
-            ;
-
-            --font-family: {
-                    {
-                    theme.fontFamily.name
-                }
-            }
-
-            ;
+          <style>
+        :root{
+            --primary-color:{{theme.colors.primary}};
+            --primary-shadow:{{theme.colors.primaryShadow}};
+            --secondary-color:{{theme.colors.secondary}};
+            --font-family:{{theme.fontFamily.name}};
         }
     </style>
 </head>
@@ -54,9 +25,8 @@
     <nav class="navbar fixed-top navbar-expand-lg bg-white py-3" id="navbar">
         <div class="container">
             <a class="navbar-brand" href="http://hostaclass.com">Hostaclass.com</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -98,13 +68,12 @@
                     <button><a href="/packages">Get Started</a></button>
                 </div>
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-4 mb-md-0">
-                    <img src="/images/Assets/teacher-working-online-on-laptop-2021-12-09-20-02-49-utc.png"
-                        alt="teacher-working-online-on-laptop" class="w-100 rounded-5">
+                    <img src="/images/Assets/teacher-working-online-on-laptop-2021-12-09-20-02-49-utc.png" alt="teacher-working-online-on-laptop"
+                        class="w-100 rounded-5">
                 </div>
             </div>
         </div>
     </section>
-    {{#if blogPosts}}
 
     <section class="blog-headingTxt py-5">
         <div class="container">
@@ -115,13 +84,14 @@
     <section class="articles">
         <div class="container">
             <div class="row">
-                {{!-- -------------posts------------- --}}
-                {{#each blogPosts}}
+                    {{!-- -------------posts------------- --}}
+                    {{#if blogPosts}}
+                    {{#each blogPosts}}
                 <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
                     <a href="/post/{{this.id}}">
                         <article class="single-item">
-                            <img src="{{this.image}}" alt="education-or-business-office-workspace-concept"
-                                class="w-100">
+                            <img src="{{this.image}}"
+                                alt="education-or-business-office-workspace-concept" class="w-100">
                             <h5 class="h5  text-black">{{this.title}}</h5>
                             <div class="meta d-flex">
                                 <div class="author_img"><img
@@ -133,63 +103,16 @@
                                 </div>
                             </div>
                         </article>
-                    </a>
+                        </a>
                 </div>
-                {{/each}}
-                {{!-- -------------------- --}}
-                {{!-- <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
-                    <article class="single-item">
-                        <img src="/images/Assets/education-or-business-office-workspace-concept-moc-2022-11-11-07-07-49-utc.jpg"
-                            alt="education-or-business-office-workspace-concept" class="w-100">
-                        <h5 class="h5  text-black">How to Organize Your Course</h5>
-                        <div class="meta d-flex">
-                            <div class="author_img"><img
-                                    src="/images/Assets/happy-male-student-online-teacher-wear-headphone-t-2022-08-23-15-27-14-utc.jpg"
-                                    alt="happy-male-student-online-teacher-wear-headphone" class="w-100"></div>
-                            <div class="author_content">
-                                <h6 class="h6  text-black"><b>Helen Nu</b></h6>
-                                <p>December 30, 2022</p>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
-                    <article class="single-item">
-                        <img src="/images/Assets/woman-working-on-a-laptop-2022-02-02-04-51-27-utc.jpg" alt=""
-                            class="w-100">
-                        <h5 class="h5  text-black">How to Advertise Yourself</h5>
-                        <div class="meta d-flex">
-                            <div class="author_img"><img
-                                    src="/images/Assets/happy-male-student-online-teacher-wear-headphone-t-2022-08-23-15-27-14-utc-.jpg"
-                                    alt="happy-male-student-online-teacher-wear-headphone" class="w-100"></div>
-                            <div class="author_content">
-                                <h6 class="h6 text-black"><b>Nathan Zamari</b></h6>
-                                <p>January 16, 2023 </p>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4 my-5 px-0 px-md-3 px-lg-4">
-                    <article class="single-item">
-                        <img src="/images/Assets/teacher-on-screen-in-online-lesson-2022-03-02-12-01-12-utc-.png" alt=""
-                            class="w-100">
-                        <h5 class="h5 text-black">How to Empower Your Students</h5>
-                        <div class="meta d-flex">
-                            <div class="author_img"><img
-                                    src="/images/Assets/happy-male-student-online-teacher-wear-headphone-t-2022-08-23-15-27-14-utc-1.jpg"
-                                    alt="happy-male-student-online-teacher-wear-headphone" class="w-100"></div>
-                            <div class="author_content">
-                                <h6 class="h6 text-black"><b>Julia Lumeno</b></h6>
-                                <p>January 20, 2023 </p>
-                            </div>
-                        </div>
-                    </article>
-                </div> --}}
+                    {{/each}}
+                    {{else}}
+                <h6 class="text-black text-center">No aritcles.</h6>
+
+                    {{/if}}
             </div>
         </div>
     </section>
-    {{/if}}
-
 
     <section class="blog-review">
         <div class="container">
@@ -214,8 +137,7 @@
     </section>
     <!-- ----------------------scripts------------------------- -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" crossorigin="anonymous"></script>
-    {{!--
-    <script src="./JS/script.js"></script> --}}
+    {{!-- <script src="./JS/script.js"></script> --}}
     <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
