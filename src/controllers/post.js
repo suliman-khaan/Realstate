@@ -58,7 +58,7 @@ module.exports = {
           );
           if (id) {
             // updating the post
-            if (req.files[featuredimg].filename) {
+            if (req.files[featuredimg]?.filename) {
               var oldimg = await Post.findById(id).select("image");
               fs.unlinkSync(`public${oldimg.image}`);
               await Post.findByIdAndUpdate(id, {

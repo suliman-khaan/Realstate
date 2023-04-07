@@ -63,15 +63,20 @@
                                                 <td>{{this.status}}</td>
                                                 <td>{{this.createdAt}}</td>
                                                 <td {{#ifEquals ../user.role "regulator" }}class="d-none" {{/ifEquals}}>
-                                                    <a href="/dashboard/edit-post/{{this._id}}" type="button">
+                                                    <a href="/dashboard/edit-post/{{this._id}}" type="button" title="Edit">
                                                         <button class="btn btn-primary">
                                                             <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </a>
+                                                    <a href="/post/{{this._id}}" type="button" target="_blank">
+                                                        <button class="btn btn-primary" title="View">
+                                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                                         </button>
                                                     </a>
                                                     <a
                                                         href="/dashboard/delete-post/{{this._id}}"
                                                         type="button">
-                                                        <button class="btn btn-danger">
+                                                        <button class="btn btn-danger" title="Delete">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </button>
                                                     </a>
