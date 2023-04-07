@@ -14,7 +14,7 @@
   --ExtraBold: 800;
   --Black: 900;
   --primary-color: #2c5f2d;
-  --primary-shadow: rgba(44, 95, 45, .25);
+  --primary-shadow: rgba(44, 95, 45, 0.25);
   --secondary-color: #92c350;
   --pure-white: #ffffff;
   --black-text: #000000;
@@ -88,7 +88,7 @@ form button:hover {
   border: 1px solid var(--primary-color) !important;
 }
 
-button>a {
+button > a {
   background-color: var(--primary-color) !important;
   color: var(--pure-white) !important;
   background-color: var(--primary-color) !important;
@@ -110,7 +110,7 @@ button:hover {
   border: 0px !important;
 }
 
-button>a:hover {
+button > a:hover {
   background-color: transparent !important;
   color: var(--primary-color) !important;
   border: 1px solid var(--primary-color) !important;
@@ -139,7 +139,7 @@ input:focus-visible {
   box-shadow: none !important;
 }
 
-input[type=checkbox] {
+input[type="checkbox"] {
   border: 1px solid black;
   border-radius: 2px !important;
   box-shadow: none !important;
@@ -204,8 +204,8 @@ body {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   width: 100%;
-  padding-right: calc(var(--bs-gutter-x) * .5);
-  padding-left: calc(var(--bs-gutter-x) * .5);
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-right: auto;
   margin-left: auto;
 }
@@ -221,7 +221,7 @@ body {
   line-height: 34px !important;
 }
 
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .body-text {
     font-size: 20px !important;
     line-height: 28px !important;
@@ -267,17 +267,17 @@ body {
   width: 350px !important;
 }
 
-@media (max-width:480px) {
+@media (max-width: 480px) {
   .form-col form {
     width: 100% !important;
   }
 }
 
-.form-col form input[type=checkbox] {
+.form-col form input[type="checkbox"] {
   min-width: auto !important;
 }
 
-.form-col form input[type=checkbox] {
+.form-col form input[type="checkbox"] {
   min-width: auto !important;
 }
 
@@ -287,7 +287,7 @@ body {
   }
 
   .login-col {
-    background: url('/images/Assets/flower\ shop.jpg'), rgba(255, 255, 255, 0.8);
+    background: url("/images/Assets/flower\ shop.jpg"), rgba(255, 255, 255, 0.8);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -297,7 +297,8 @@ body {
   }
 
   .signup-col {
-    background: url('../Assets/female-teacher-showing-okay-gesture-explaining-ma-2022-12-16-08-30-20-utc.jpg'), rgba(255, 255, 255, 0.8);
+    background: url("../Assets/female-teacher-showing-okay-gesture-explaining-ma-2022-12-16-08-30-20-utc.jpg"),
+      rgba(255, 255, 255, 0.8);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -323,7 +324,6 @@ body {
 @media (max-width: 767px) {
   #navbar ul.menu .nav-item {
     margin: 18px 0;
-
   }
 }
 
@@ -367,8 +367,7 @@ body {
   color: var(--primary-color) !important;
 }
 
-@media(max-width: 991px) {
-
+@media (max-width: 991px) {
   #navbar .btns,
   #navbar .menu {
     margin-top: 40px !important;
@@ -387,7 +386,6 @@ body {
   text-align: center;
   color: var(--primary-color);
 }
-
 
 /* *******************Blog page****************************** */
 .about-customize {
@@ -434,7 +432,7 @@ body {
   z-index: -1;
 }
 
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .blog-review::before {
     height: 80%;
   }
@@ -448,7 +446,7 @@ body {
 .articles .single-item:hover {
   transform: scale(1.03);
 }
-.articles .single-item img{
+.articles .single-item img {
   width: 100%;
   height: 200px;
   object-fit: cover;
@@ -468,7 +466,7 @@ body {
   object-fit: cover !important;
 }
 
-.articles .single-item .meta .author_img>img {
+.articles .single-item .meta .author_img > img {
   width: 100% !important;
   height: 100% !important;
 }
@@ -482,7 +480,7 @@ body {
 }
 
 /* -------------single post ----------------------- */
-.single-hero{
+.single-hero {
   margin-top: 80px;
   position: relative;
 }
@@ -499,7 +497,7 @@ body {
   }
 }
 
-.single-hero::before{
+.single-hero::before {
   content: "";
   width: 55%;
   height: 80%;
@@ -510,11 +508,11 @@ body {
   transform: translateY(-50%);
   z-index: -1;
 }
-@media(max-width: 767px){
-  .single-hero{
+@media (max-width: 767px) {
+  .single-hero {
     padding: 20px 0;
   }
-  .single-hero::before{
+  .single-hero::before {
     content: "";
     width: 100%;
     height: 100%;
@@ -527,7 +525,7 @@ body {
   }
 }
 
-.single-hero .post-meta{
+.single-hero .post-meta {
   margin-top: 30px;
 }
 
@@ -538,22 +536,26 @@ body {
   object-fit: cover !important;
 }
 
-.single-hero .post-meta .author_img>img {
+.single-hero .post-meta .author_img > img {
   width: 100% !important;
   height: 100% !important;
 }
+.single-hero .post-meta .author_img > img.white {
+  filter: invert(96%) sepia(100%) saturate(0%) hue-rotate(309deg)
+    brightness(104%) contrast(101%);
+}
 
-.single-hero .post-meta  .author_content {
+.single-hero .post-meta .author_content {
   margin-left: 20px;
 }
 
 .single-hero .post-meta .author_content h6 {
   margin-bottom: 0 !important;
 }
-.post-content{
+.post-content {
   margin: 100px 0;
 }
 
-.post-content .container{
+.post-content .container {
   max-width: 1000px !important;
 }

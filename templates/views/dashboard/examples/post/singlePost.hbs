@@ -65,7 +65,7 @@
                 <div class="post-meta d-flex">
                  <div class="author_img"><img
                        src="{{#if postData.avatar}}{{postData.avatar}}{{else}}/images/Assets/pngegg.png{{/if}}"
-                       alt="pngegg.png" class="w-100"></div>
+                       alt="pngegg.png" class="w-100 {{#unless postData.avatar}}white{{/unless}}"></div>
                    <div class="author_content">
                        <h6 class="h6 text-white"><b>{{postData.author.name}}</b></h6>
                        <p class="text-white">{{formatDate postData.createdAt}}</p>
