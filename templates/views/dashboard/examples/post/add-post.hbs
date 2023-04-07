@@ -172,7 +172,7 @@
                 type: "POST",
                 success: function (data) {
                     data.forEach((e)=>{
-                         let image = $('<img>').attr('src', `/images/posts/${e.filename}`);
+                         let image = $('<img>').attr({'src': `/images/posts/${e.filename}`, 'width':'100%'});
                          $(editor).summernote('insertNode',image[0])
                     })
                 },
