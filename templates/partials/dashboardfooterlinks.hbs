@@ -211,6 +211,11 @@
             $('#post-add-link').addClass("active")
         }
         //post
+        if (url.includes("edit-post")) {
+            $("#dashboard-link").removeClass("active")
+            $('#post-link').addClass("active")
+        }
+        //post
         if (url.includes("posts")) {
             $("#dashboard-link").removeClass("active")
             $('#post-link').addClass("active")
